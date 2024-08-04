@@ -19,8 +19,7 @@ const ticketSchema = new Schema({
     },
     products: [
         {
-            type: Schema.Types.ObjectId,
-            ref: 'products'
+            type: Object
         }
     ]
 })
@@ -28,3 +27,11 @@ const ticketSchema = new Schema({
 const ticketModel = model ('ticket', ticketSchema)
 
 export default ticketModel
+
+
+// products: [
+//     {
+//         type: Schema.Types.ObjectId,
+//         ref: 'products'
+//     }
+// ]

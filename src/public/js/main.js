@@ -18,10 +18,21 @@ Swal.fire({
 })
 
 
+checkBox.addEventListener('keyup', (e) => {
+    if(e.key === 'Enter'){
+        if (checkBox.value.trim().length > 0){ 
+            socket.emit('mensaje', { usuario: user, mensaje: chatBox.value, hora: new Date().toLocaleTimeString()})
+            chatBox.value = '' //Limpio el chatBox
+        } 
+    }
+})
 
-
-
-
+socket.on('mensajeLogs', info => {
+    messageLogs.innerHTML = ''
+    info.forEach(mensaje => {
+        messageLogs.innerHTML += `<p><strong>${mensaje.usuario} dice: </strong>: ${mensaje.mensaje}. ${mensaje.hora}</p>`
+    });
+})
 
 
 // const socket = io()

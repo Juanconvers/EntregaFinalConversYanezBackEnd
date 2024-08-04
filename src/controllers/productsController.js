@@ -14,14 +14,14 @@ export const getProducts = async (req, res) => {
                 metFilter = "category";
     }
     
-    const query = metFilter != undefined ? { [metFilter]: filter } : {};
+    const query = metFilter ? { [metFilter]: filter } : {};
     const ordQuery = ord !== undefined ? { price: ord } : {};
     const prods = await productModel.paginate(query, { limit: limi, page: pag, sort: ordQuery });
-    res.status(200).send(prods)
+    const prodsJSON = prods.docs.map(prod => prod.toJSON())
+    
+    res.status(200).send(prodsJSON)
 } catch (error){
-    res.status(500).render ('templates/error', {
-        error: error,
-    });
+    res.status(500).send(`Error interno del servidor al consultar productos: ${error}`)
 }}
 
 export const getProduct = async (req, res) => {
@@ -40,7 +40,7 @@ export const getProduct = async (req, res) => {
     
 export const createProduct = async (req, res) => {
     try {
-        if (req.user.rol == "Admin"){
+        if (req.user.role == "Admin"){
             const product = req.body
             const mensaje = await productModel.create(product)
             res.status(201).send(mensaje)
@@ -54,7 +54,7 @@ export const createProduct = async (req, res) => {
     
 export const updateProduct = async (req, res) => {
     try {
-        if (req.user.rol == "Admin") {
+        if (req.user.role == "Admin") {
             const idProducto = req.params.pid
             const updateProduct = req.body
             const prod = await productModel.findByIdAndUpdate(idProducto, updateProduct)
@@ -67,9 +67,9 @@ export const updateProduct = async (req, res) => {
     }
 }
     
-export const deleteProduct = async (idProducto) => {
+export const deleteProduct = async (req, res) => {
     try {
-        if (req.user.rol == "Admin") {
+        if (req.user.role == "Admin") {
             const idProducto = req.params.pid
             const mensaje = await productModel.findByIdAndDelete(idProducto)
             res.status(200).send(mensaje)

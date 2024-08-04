@@ -12,6 +12,10 @@ export const login = async (req, res) => {
             email: req.user.email,
             first_name: req.user.first_name
         }
+        
+        const token = jwt.sign(userDto,'tokenSecretJWT',{expiresIn:"1h"});
+        res.cookie('coderCookie',token,{maxAge:3600000}).send({status:"success",message:"Logged in"})
+       
         res.status(200).send("Usuario logueado correctamente")
     } catch (e) {
         res.status(500).send("Error al loguear usuario")
@@ -20,27 +24,38 @@ export const login = async (req, res) => {
 
 export const register = async (req, res) => {
     try {
-        if(!req.user){
-            return res.status(400).send("El usuario ya existe en la app")
+        const { first_name, last_name, email, password } = req.body;
+        if (!first_name || !last_name || !email || !password) return res.status(400).send({ status: "error", error: "Volares incompletos" });
+        const exists = await usersService.getUserByEmail(email);
+        if (exists) return res.status(400).send({ status: "error", error: "EL usuario ya existe" });
+        const hashedPassword = await createHash(password);
+        const user = {
+            first_name,
+            last_name,
+            email,
+            password: hashedPassword
         }
-        res.status(200).send("Usuario creado adecuadamente")
-    } catch (e) {
+        let result = await usersService.create(user);
+        console.log(result);
+        res.send({ status: "success", payload: result._id });
+    } catch (error) {
         res.status(500).send("Error al registrar al usuario")
     }
 }
 
+
 export const logout = async (req, res) => {
-    req.session.destroy(function (e) {
-        if (e) {
-            console.log(e)
-        } else {
-            res.status(200).redirect("/")
-        }
-    })
-}
+    const user = await userModel.findOne({ email: req.session.user.email })
+    user.last_connection: = new Date() 
+    await user.save()
+    
+    req.session.destroy((e =>
+         e ? res.status(500).send('Error al cerrar sesion') : res.status(200).redirect(/*"api/session/login" o: */ "/")
+    ))
+};
 
 export const sessionGithub = async (req, res) => {
-    console.log(req)
+    
     req.session.user = {
         email: req.user.email,
         first_name: req.user.name
@@ -50,7 +65,7 @@ export const sessionGithub = async (req, res) => {
  
 export const testJWT = async (req, res) => {
     console.log("Desde testJWT" + req.user)
-    if (req.user.rol == 'User')
+    if (req.user.role == 'User')
         res.status(403).send("Usuario no autorizado")
     else
         res.status(200).send(req.user)
@@ -71,15 +86,15 @@ export const recoverPassword = async (req, res) => {
                 console.log(resultado)
                 res.status(200).send("Contraseña modificada correctamente")
             }else{
-                //iguales contraseñas coinciden
-                res.status(400).send("La contraseña no puede ser identificada")
+                
+                res.status(400).send("La contraseña es igual a la anterior")
 
             }
         }else{ 
             res.status(404).send("Usuario no encontrado")
         }
    }catch (e){
-        console.log(e)
+        res.status(500).send('Error al cambiar contraseña: ', error)
         if(e?.message == 'jwt.expired'){
             res.status(400).send("El tiempo para recuperar la contraseña ha expirado. Use nuevo token")
         }
@@ -89,7 +104,6 @@ export const recoverPassword = async (req, res) => {
 }
 
 export const sendEmailPassword = async (req, res) => {
-    
     
     try{
         const {email} = req.body
@@ -106,9 +120,18 @@ export const sendEmailPassword = async (req, res) => {
     }catch (e){
         res.status(500).send(e)
     }
-
 }
 
+// export const register = async (req, res) => {
+//     try {
+//         if(!req.user){
+//             return res.status(400).send("El usuario ya existe en la app")
+//         }
+//         res.status(200).send("Usuario creado adecuadamente")
+//     } catch (e) {
+//         res.status(500).send("Error al registrar al usuario")
+//     }
+// }
 
 // sessionRouter.get('/current', passport.authenticate('jwt'), (req, res) => {
 //     console.log(req)

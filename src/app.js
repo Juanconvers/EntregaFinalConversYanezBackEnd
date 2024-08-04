@@ -19,6 +19,14 @@ import { __dirname } from './path.js'
 const app = express()
 const PORT = 11000
 
+const corsOptions = {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}
+app.use(cors(corsOptions))
+
+
 //Server
 const server = app.listen(PORT, () => {
     console.log(`Server on port ${PORT}`)
@@ -45,15 +53,11 @@ const swaggerOptions = {
 
 const specs = swaggerJsdoc(swaggerOptions)
 
-
-
-
-//Middlewares
-app.use(express.json()) 
-
     //Documentación de la API
 app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
+//Middlewares
+app.use(express.json()) 
 app.use(session({
     secret: varenv.session_secret,
     resave: true,
@@ -64,10 +68,10 @@ app.use(session({
     saveUninitialized: true
 }))
 
-app.use(cookieParser(varenv.cookie_secret))
 app.engine('handlebars', engine())
 app.set('view engine', 'handlebars')
 app.set('views', __dirname + '/views')
+app.use(cookieParser(varenv.cookie_secret))
 
 initializePassport()
 app.use(passport.initialize())
@@ -110,9 +114,11 @@ app.post('/login', (req,res) => {
     if (email == "admin@admin.com" && password == "12345"){
         req.session.email = email
         req.session.password = password
+        res.send('Login exitoso')
+    } else {
+        res.send('Login incorrecto')
     }
-    console.log(req.session)
-    res.send("login")
+
 })
 
 

@@ -20,9 +20,10 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        unique: true
+        unique: true,
+        index: true
     },
-    rol: {
+    role: {
         type: String,
         default: "User"
     },
@@ -49,14 +50,14 @@ userSchema.pre('save', async function (next) {
     }
 })
 
-// userSchema.pre('find', async function (next){
-//     try {
-//         const prods = await cartModel.findOne({ _id: })
-//         console.log(prods)
-//         this.populate('cart_id')
-//     } catch (e) {
-//         next(e)
-//     }
-// })
+userSchema.pre('find', async function (next){
+    try {
+        // const prods = await cartModel.findOne({ _id: })
+        // console.log(prods)
+        this.populate('cart_id')
+    } catch (e) {
+        next(e)
+    }
+})
 
 export const userModel = model("users", userSchema)

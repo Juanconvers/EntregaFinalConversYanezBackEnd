@@ -5,7 +5,7 @@ import { login, register, sessionGithub, logout, testJWT, sendEmailPassword, rec
 
 const sessionRouter = Router()
 
-sessionRouter.get('/login', passport.authenticate('login'), login)
+sessionRouter.post('/login', passport.authenticate('login'), login)
 
 sessionRouter.post('/register', passport.authenticate('register'), register)
 

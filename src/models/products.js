@@ -5,7 +5,8 @@ import paginate from 'mongoose-paginate-v2'
 const productSchema = new Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        index: true
     },
     description: {
         type: String,

@@ -20,9 +20,11 @@ export const sendEmailRecoverPassword = async(email, linkChangePassword) => {
         `,
         html:
         `
-            <p>Haga click en el siguiente enlace para cambiar su contraseña: <button></p><a href=${linkChangePassword}>Reestablecer contraseña</a></button>
-
+            <div>
+                <p>Haga click en el siguiente enlace para cambiar su contraseña: <button></p><a href=${linkChangePassword}>Reestablecer contraseña</a></button>
+            </div>
         ` 
+        
        }
 
        transporter.sendMail(mailOption, (error, info) => {
@@ -31,7 +33,5 @@ export const sendEmailRecoverPassword = async(email, linkChangePassword) => {
             } else {
                 console.log("Correo enviado correctamente", info.response)
             }
-
        })
-
 }
