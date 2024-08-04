@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken'
+import varenv from '../dotenv'
 
 export const generateToken = (user) => {
 
     
-    const token = jwt.sign({ user }, "coder", { expiresIn: '12h' })
+    const token = jwt.sign({ user }, varenv.jwt_secret, { expiresIn: '12h' })
     return token
 }
 

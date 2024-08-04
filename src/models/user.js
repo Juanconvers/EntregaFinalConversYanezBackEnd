@@ -61,3 +61,5 @@ userSchema.pre('find', async function (next){
 })
 
 export const userModel = model("users", userSchema)
+
+export default userModel
