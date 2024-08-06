@@ -63,3 +63,16 @@ userSchema.pre('find', async function (next){
 export const userModel = model("users", userSchema)
 
 export default userModel
+
+
+
+
+
+// {
+//     "first_name": "Juan",
+//     "last_name": "Convers",
+//     "password": "miyiqenemitabayajepu",
+//     "age": 53,
+//     "email": "Elmira60@hotmail.com",
+//     "role": "Admin"
+// }

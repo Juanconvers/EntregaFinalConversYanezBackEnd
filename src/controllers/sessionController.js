@@ -28,7 +28,7 @@ export const register = async (req, res) => {
         if (!first_name || !last_name || !email || !password) return res.status(400).send({ status: "error", error: "Volares incompletos" });
         const exists = await usersService.getUserByEmail(email);
         if (exists) return res.status(400).send({ status: "error", error: "EL usuario ya existe" });
-        const hashedPassword = await createHash(password);
+        const hashedPassword = createHash(password);
         const user = {
             first_name,
             last_name,
@@ -138,3 +138,31 @@ export const sendEmailPassword = async (req, res) => {
 //     res.status(200).send("Usuario Logueado Perfectamente")
 // })
 
+
+// Viene desde el app.js 
+
+// Session Routes
+
+// app.get('/session', (req, res) => {
+//     console.log(req.session)
+//     if (req.session.counter) {
+//         req.session.counter++
+//         res.send(`Usted es el usuario No. ${req.session.counter} en entrar a esta pagina`)
+//     } else {
+//         req.session.counter = 1
+//         res.send(`Usted es el primer usuario en entrar a esta pagina`)
+//     }
+// })
+
+// app.post('/login', (req, res) => {
+//     const { email, password } = req.body
+
+//     if (email == "admin@admin.com" && password == "12345") {
+//         req.session.email = email
+//         req.session.password = password
+//         res.send('Login exitoso')
+//     } else {
+//         res.send('Login incorrecto')
+//     }
+
+// })

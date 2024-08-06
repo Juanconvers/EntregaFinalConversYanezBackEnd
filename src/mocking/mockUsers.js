@@ -9,8 +9,8 @@ const createRandomUsers = () => {
         password: faker.internet.password({ length: 20, memorable: true }),
         age: faker.helpers.rangeToNumber({ min: 18, max: 90 }),
         email: faker.internet.email(),
-        role: faker.helpers.objectKey({ myProperty: 'user' }),
-        cart_id: faker.database.mongodbObjectId(),
+        role: "user",
+        cart_id: faker.string.uuid(),
         documents:faker.helpers.arrayElements(['cat', 'dog', 'mouse']),
         last_connection: faker.date.recent()
     }

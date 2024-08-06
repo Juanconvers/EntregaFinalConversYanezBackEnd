@@ -21,5 +21,6 @@ indexRouter.use('/api/cart', cartRouter)
 indexRouter.use('/api/chat', chatRouter, express.static(__dirname + '/public'))
 indexRouter.use('/api/users', userRouter)
 indexRouter.use('/api/session', sessionRouter)
+indexRouter.use('/api/session', viewsRouter)
 
 export default indexRouter

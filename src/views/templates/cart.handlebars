@@ -1,0 +1,63 @@
+
+    {{#if products}}
+      <div>
+        <h2>CARRITO DE COMPRAS</h2>
+        <div>
+          {{#each products}}
+        {{!-- Producto --}}
+
+            {{!-- Thumbnail --}}
+            <div> <img src="{{thumbnail}}"
+                alt="product thumbnail"
+                width="180"
+                height="100"
+                class="rounded-t-lg object-cover w-full"
+                style="aspect-ratio: 180 / 100;"
+              />
+
+              {{!-- Info del producto --}}
+              <div>
+                <h3>{{productId.title}}</h3>
+                <p>{{productId.description}}</p>
+                <div>
+                  <div>
+                    {{#if (quantityGreaterThanOne quantity)}}
+                    <button id="remove-btn-{{this.productId._id}}" type="button" onclick="removeProductFromCart(event, '{{this.productId._id}}')">Borrar producto del carrito </button>
+                        {{else}}
+                        <button id="remove-btn-{{this.productId._id}}"disabled="" type="button" onclick="removeProductFromCart(event, '{{this.productId._id}}')"></button>
+                    
+                    {{/if}}
+
+                    <span class="text-gray-900 dark:text-gray-50 font-medium" id="quantity-{{this.productId._id}}">{{quantity}}</span>
+                    
+                    <button id="add-btn-{{this.productId._id}}" type="button" onclick="addProductToCart(event, '{{this.productId._id}}')"></button>
+                  
+                  </div>
+                {{!-- Precio --}}
+                  <div>{{formatPrice productId.price}}</div>
+                </div>
+                <button onclick="removeWholeProductFromCart(event, '{{this.productId._id}}')">Borrar todos los productos del carrito</button>
+              
+              </div>
+            </div>
+
+    {{/each}}
+        </div>
+      </div>
+      
+      <div>
+        <div>Total:{{formatPrice total}}</div>
+
+        <div class="flex gap-4">
+          <button id="clearCart"  onclick="removeCart(event, '{{cartId}}')"> Borrar prodcutos del carrito </button> <a href="/checkout"> 
+          <button> Pagar </button>
+        </div>
+      </div>
+
+    {{else}}
+        <h2>EL carrito de compras está vacío</h2>
+        <a href="/products" >Volver a la página de inicio</a>
+      </div>
+    {{/if}}
+  </div>
+</section>

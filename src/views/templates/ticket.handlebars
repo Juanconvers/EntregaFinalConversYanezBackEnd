@@ -1,0 +1,54 @@
+<section>
+  <div>
+     <h2>Finalizar compra</h2>
+    {{#if products}}
+      <div>
+        <div>
+            <h2>Carrito de compras</h2>
+          <div>
+                Total: <div id="total-price">{{formatPrice total}}</div>
+          </div>
+        </div>
+        {{!-- Información de los productos  --}}
+        <div>
+          {{#each products}}
+            <div>
+              <img src="{{thumbnail}}"
+                alt="product thumbnail"
+                width="80"
+                height="50"
+                class="rounded-tl-lg rounded-bl-lg object-cover"
+                style="aspect-ratio: 80 / 50; object-fit: cover;"
+              />
+              <div>
+                <h3>{{productId.title}}</h3>
+                <div>
+                  <div>{{formatPrice productId.price}}</div>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+
+      </div>
+    
+    <!-- Informacion para el pago -->
+
+      <div>
+        <h3>Información para el pago</h3>
+        <div>
+          <input type="text" name="card_number" placeholder="Numero de la tarjeta" required=""/>
+          <input type="text" name="card_name" placeholder="Nombre de la tarjeta" required=""/>
+          <input type="text" name="card_expiration" placeholder="Fecha de expiración" required=""/>
+          <input type="text" name="card_cvv" placeholder="Código de la tarjeta" required=""/>
+        </div>
+      </div>
+
+      <!-- Completar compra -->
+      <div>
+        <button type="submit" onclick="buyCart(event, '{{cartId}}')"> Ir a pagar</button>
+      </div>
+    </form>
+  </div>
+
+</section>

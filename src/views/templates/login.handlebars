@@ -1,0 +1,44 @@
+<section>
+  <div>
+    <div>
+      <h2>Iniciar Sesión</h2>
+    </div>
+    <form id="loginForm">
+      <div>
+        <label>Email</label>
+        
+        <div> 
+          <input name="email" id="email" required="" type="email" value=""/>
+        </div>
+      
+      </div>
+      <div>
+        <label for="password" name="password"> Password </label>
+        <div>
+          <input id="password" autocomplete="on" name="password" type="password" value=""/>
+        </div>
+        
+        <p id="passwordError" class="text-red-500 text-sm mt-1 hidden"></p>
+      </div>
+
+        <div>
+            <a href="/resetpass">¿Olvidó su contraseña?</a>
+        </div>
+        
+        </div>
+      <div>
+        <button type="submit">Iniciar sesión</button>
+      </div>
+      
+      <div>
+        <button id="githubLogin">Iniciar sesión con GitHub</button>
+      </div>
+
+      <div id="register">
+        <p>Crear una nueva cuenta de usuario
+        <a class="hover:underline" href="/register">Ir a Registro</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</section>

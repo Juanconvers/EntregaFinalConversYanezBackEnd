@@ -1,1 +1,85 @@
-<h1>Buenas tardes señor.</h1> 
+<section>
+    <h1>Lista de productos</h1>
+    <div>
+        {{#each products}}
+        <div>
+          <img
+            src="{{thumbnail}}"
+            alt="Product image"
+            width="180"
+            height="200"
+            class="rounded-t-lg object-cover w-full h-56"
+            style="aspect-ratio: 180 / 200;"
+          />
+          <div>
+            <h3>{{title}}</h3>
+            <p>{{description}}</p>
+            <div>{{formatPrice price}}
+              <button> Agregar al carrito</button>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</section>
+
+{{!-- {{#if products}}
+    <h1>Lista de productos</h1>
+{{else}}
+    <h1>No hay productos en este momento</h1>
+{{/if}}
+
+{{#each products}}
+    <div>
+        <p>{{this.title}}</p>
+        <p>{{this.description}}</p>
+        <p>{{this.code}}</p>
+        <p>{{this.price}}</p>
+        <p>{{this.status}}</p>
+        <p>{{this.stock}}</p>
+        <p>{{this.category}}</p>
+        <p>{{this.thumbnails}}</p>
+    </div>
+    <br/>
+{{/each}} --}}
+
+
+
+{{!-- <div class="row">
+<h1>Productos para mostrar</h1>
+    {{#if mostrarProductos}}
+    {{#each productos}}
+
+    <div class="col">
+        <div class="card form-control" style="width: 18rem;">
+            <img src="{{this.thumbnail}}" alt="Imagen de {{this.title}}" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title">{{this.title}}</h5>
+                <p class="card-text">Categoría: {{this.category}} </p>
+             -*   <p class="card-text">Descripción: {{this.description}} </p>
+                <p class="card-text">Estado: {{this.status}} </p>
+                <p class="card-text">En bodega: {{this.stock}} </p>
+                <p class="card-text">Código: {{this.code}} </p>
+                <p class="card-text">Precio: {{this.price}} </p>
+                <a href="#" class="btn btn-primary">Agregar al carrito</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{{!-- <div>
+    <p>Titulo: </p>
+    <p>Descripción: {{this.description}}</p>
+    <p>En bodega: {{this.stock}}</p>
+    <p>Código: {{this.code}}</p>
+    <p>Precio: {{this.price}}</p>
+    <img src="{{this.img}}" alt="Imagen de {{this.title}}">
+</div> --}}
+
+{{!-- {{/each}}
+{{else}}
+<p>No se pueden mostrar los productos</p>
+{{/if}} --}}

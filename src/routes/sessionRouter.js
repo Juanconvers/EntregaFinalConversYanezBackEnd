@@ -25,6 +25,13 @@ sessionRouter.post('/reset-password?:token', recoverPassword)
 export default sessionRouter
 
 
+// const user = {
+//     first_name,
+//     last_name,
+//     email,
+//     password: hashedPassword
+// }
+
 // {
 //     "email": "cartucherall@gmail.com",
 //     "password": "Libelula25",
