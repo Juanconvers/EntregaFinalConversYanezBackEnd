@@ -22,12 +22,25 @@ export const login = async (req, res) => {
     }
 }
 
+// app.post('/login', (req, res) => {
+//     const { email, password } = req.body
+
+//     if (email == "admin@admin.com" && password == "12345") {
+//         req.session.email = email
+//         req.session.password = password
+//         res.send('Login exitoso')
+//     } else {
+//         res.send('Login incorrecto')
+//     }
+
+// })
+
 export const register = async (req, res) => {
     try {
         const { first_name, last_name, email, password } = req.body;
-        if (!first_name || !last_name || !email || !password) return res.status(400).send({ status: "error", error: "Volares incompletos" });
+        if (!first_name || !last_name || !email || !password) return res.status(400).send({ status: "error", error: "Valores incompletos" });
         const exists = await usersService.getUserByEmail(email);
-        if (exists) return res.status(400).send({ status: "error", error: "EL usuario ya existe" });
+        if (exists) return res.status(400).send({ status: "error", error: "El usuario ya existe" });
         const hashedPassword = createHash(password);
         const user = {
             first_name,
@@ -43,6 +56,12 @@ export const register = async (req, res) => {
     }
 }
 
+// {
+//     "first_name":"Carlos",
+//     "last_name": "Agosto",
+//     "email": "carlos7agosto@gmail.com",
+//     "password": "Sisenor95"
+// }
 
 export const logout = async (req, res) => {
     const user = await userModel.findOne({ email: req.session.user.email })
@@ -154,15 +173,3 @@ export const sendEmailPassword = async (req, res) => {
 //     }
 // })
 
-// app.post('/login', (req, res) => {
-//     const { email, password } = req.body
-
-//     if (email == "admin@admin.com" && password == "12345") {
-//         req.session.email = email
-//         req.session.password = password
-//         res.send('Login exitoso')
-//     } else {
-//         res.send('Login incorrecto')
-//     }
-
-// })

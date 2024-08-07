@@ -75,9 +75,9 @@ app.use(session({
 }))
 
 //Handlebars
-app.engine("handlebars", handlebars.engine())
-app.set("view engine", "handlebars")
-app.set("views", path.join(__dirname, "./views"))
+app.engine('handlebars', engine())
+app.set('view engine', 'handlebars')
+app.set('views', __dirname + '/views')
 
 
 app.use(cookieParser(varenv.cookie_secret))
@@ -88,7 +88,7 @@ app.use(passport.session())
 
 //Routes
 
-// app.use('/', indexRouter)
+app.use('/', indexRouter)
 
 app.get('/static', (req, res) => {
     res.render('error')
@@ -97,27 +97,27 @@ app.get('/static', (req, res) => {
 
 // Cookies Routes
 
-// app.get('/setCookie', (req, res) => {
-//     res.cookie('MyCookie', 'Esto es una cookie', { maxAge: 4000000, signed: true }).send("Cookie creada por mí")
-// })
+app.get('/setCookie', (req, res) => {
+    res.cookie('MyCookie', 'Esto es una cookie', { maxAge: 4000000, signed: true }).send("Cookie creada por mí")
+})
 
-// app.get('/getCookie', (req, res) => {
-//     res.send(req.signedCookies)
-// })
+app.get('/getCookie', (req, res) => {
+    res.send(req.signedCookies)
+})
 
-// app.get('/deleteCookie', (req, res) => {
-//     res.clearCookie('MyCookie').send("Cookie eliminada totalmente")
-// })
+app.get('/deleteCookie', (req, res) => {
+    res.clearCookie('MyCookie').send("Cookie eliminada totalmente")
+})
 
-// io.on('connection', (socket) => {
-//     console.log("Conexion con Socket.io")
-//     socket.on('mensaje', async (mensaje) => {
-//         try {
-//             await messageModel.create(mensaje)
-//             const mensajes = await messageModel.find()
-//             io.emit('mensajeLogs', mensajes)
-//         } catch (e) {
-//             io.emit('mensajeLogs', e)
-//         }
-//     })
-// })
+io.on('connection', (socket) => {
+    console.log("Conexion con Socket.io")
+    socket.on('mensaje', async (mensaje) => {
+        try {
+            await messageModel.create(mensaje)
+            const mensajes = await messageModel.find()
+            io.emit('mensajeLogs', mensajes)
+        } catch (e) {
+            io.emit('mensajeLogs', e)
+        }
+    })
+})
