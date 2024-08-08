@@ -20,7 +20,7 @@ const jwtOptions = {
 export const strategyJWT = new JwtStrategy(jwtOptions, async (payload, done) => {
     try {
         console.log(payload)
-        const user = await userModel.findById(payload.user._id)
+        const user = await userModel.findById(payload.user._id) 
         console.log(user)
         if (!user) {
             return done(null, false)

@@ -76,8 +76,11 @@ app.use(session({
 
 //Handlebars
 app.engine('handlebars', engine())
-app.set('view engine', 'handlebars')
 app.set('views', __dirname + '/views')
+app.set('view engine', 'handlebars')
+
+
+
 
 
 app.use(cookieParser(varenv.cookie_secret))
@@ -90,9 +93,11 @@ app.use(passport.session())
 
 app.use('/', indexRouter)
 
-app.get('/static', (req, res) => {
-    res.render('error')
-})
+// app.get('/static', (req, res) => {
+//     res.render('error')
+// })
+
+
 
 
 // Cookies Routes

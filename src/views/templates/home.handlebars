@@ -24,7 +24,8 @@
   </div>
 </section>
 
-<script src="/js/home.js"></script>
+<script src="/js/home.js"></script> 
+
 
 {{!-- {{#if products}}
     <h1>Lista de productos</h1>
@@ -44,7 +45,7 @@
         <p>{{this.thumbnails}}</p>
     </div>
     <br/>
-{{/each}} --}}
+{{/each}}
 
 
 
@@ -82,6 +83,30 @@
 </div> --}}
 
 {{!-- {{/each}}
+{{else}}
+<p>No se pueden mostrar los productos</p>
+{{/if}} --}}
+
+
+
+
+
+
+
+
+
+{{!-- <h1>Productos</h1>
+
+{{#if mostrarProductos}}
+{{#each productos}}
+<div>
+    <p>Titulo: {{this.title}}</p>
+    <p>Descripcion: {{this.description}}</p>
+    <p>Precio: {{this.price}}</p>
+    <p>Stock: {{this.stock}}</p>
+    <img src="{{this.img}}" alt="Imagen de {{this.title}}">
+</div>
+{{/each}}
 {{else}}
 <p>No se pueden mostrar los productos</p>
 {{/if}} --}}
