@@ -10,15 +10,15 @@ export const login = async (req, res) => {
         }
         req.session.user = {
             email: req.user.email,
-            first_name: req.user.first_name
+            password: req.user.password
         }
         
-        const token = jwt.sign(userDto,'tokenSecretJWT',{expiresIn:"1h"});
-        res.cookie('coderCookie',token,{maxAge:3600000}).send({status:"success",message:"Logged in"})
+        const token = jwt.sign(req.session.user,'tokenSecretJWT',{expiresIn:"1h"});
+        res.cookie('coderCookie',token,{maxAge:3600000, httpOnly: true});
        
-        res.status(200).send("Usuario logueado correctamente")
+        res.status(200).send({status:"success", message: "Usuario logueado correctamente"})
     } catch (e) {
-        res.status(500).send("Error al loguear usuario")
+        res.status(500).send("Error al loguear usuario" +e)
     }
 }
 
@@ -39,7 +39,7 @@ export const register = async (req, res) => {
     try {
         const { first_name, last_name, email, password } = req.body;
         if (!first_name || !last_name || !email || !password) return res.status(400).send({ status: "error", error: "Valores incompletos" });
-        const exists = await usersService.getUserByEmail(email);
+        // const exists = await usersService.getUserByEmail(email);
         if (exists) return res.status(400).send({ status: "error", error: "El usuario ya existe" });
         const hashedPassword = createHash(password);
         const user = {
@@ -48,11 +48,11 @@ export const register = async (req, res) => {
             email,
             password: hashedPassword
         }
-        let result = await usersService.create(user);
+        // let result = await usersService.create(user);
         console.log(result);
         res.send({ status: "success", payload: result._id });
     } catch (error) {
-        res.status(500).send("Error al registrar al usuario")
+        res.status(500).send("Error al registrar al usuario "+ error)
     }
 }
 
