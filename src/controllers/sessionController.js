@@ -39,7 +39,7 @@ export const register = async (req, res) => {
     try {
         const { first_name, last_name, email, password } = req.body;
         if (!first_name || !last_name || !email || !password) return res.status(400).send({ status: "error", error: "Valores incompletos" });
-        // const exists = await usersService.getUserByEmail(email);
+        // const exists = await getUserByEmail(email);
         if (exists) return res.status(400).send({ status: "error", error: "El usuario ya existe" });
         const hashedPassword = createHash(password);
         const user = {
@@ -48,7 +48,7 @@ export const register = async (req, res) => {
             email,
             password: hashedPassword
         }
-        // let result = await usersService.create(user);
+        // let result = await create(user);
         console.log(result);
         res.send({ status: "success", payload: result._id });
     } catch (error) {

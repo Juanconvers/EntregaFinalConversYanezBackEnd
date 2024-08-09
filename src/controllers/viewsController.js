@@ -20,8 +20,6 @@ export const getProductos = async (req, res) => {
     export const cartView = async (req, res) => {
     
         res.render('templates/cart', {
-            mostrarProductos: true,
-            productos: prods,
             css: 'cart.css'
         })
     }
@@ -29,8 +27,6 @@ export const getProductos = async (req, res) => {
     export const errorView = async (req, res) => {
     
         res.render('templates/error', {
-            mostrarProductos: true,
-            productos: prods,
             css: 'error.css'
         })
     }
@@ -38,17 +34,13 @@ export const getProductos = async (req, res) => {
     export const homeView = async (req, res) => {
     
         res.render('templates/home', {
-            mostrarProductos: true,
-            productos: prods,
-            css: 'home.css'
+             css: 'home.css'
         })
     }
 
     export const loginView = async (req, res) => {
     
         res.render('templates/login', {
-            mostrarProductos: true,
-            productos: prods,
             css: 'login.css'
         })
     }
@@ -56,8 +48,6 @@ export const getProductos = async (req, res) => {
     export const registerView = async (req, res) => {
     
         res.render('templates/register', {
-            mostrarProductos: true,
-            productos: prods,
             css: 'register.css'
         })
     }
@@ -65,8 +55,6 @@ export const getProductos = async (req, res) => {
     export const ticketView = async (req, res) => {
     
         res.render('templates/ticket', {
-            mostrarProductos: true,
-            productos: prods,
             css: 'ticket.css'
         })
     }

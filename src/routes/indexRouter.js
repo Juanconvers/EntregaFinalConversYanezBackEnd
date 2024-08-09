@@ -14,12 +14,12 @@ import { __dirname } from '../path.js'
 const indexRouter = express.Router()
 
 //Routes
-indexRouter.get('/', (req, res) => {
-    res.status(200).send("Bienvenido!")
-})
+// indexRouter.get('/', (req, res) => {
+//     res.status(200).send("Bienvenido!")
+// })
 
 
-indexRouter.use('/static', viewsRouter, express.static(__dirname + '/public'))
+indexRouter.use('/', viewsRouter, express.static(__dirname + '/public'))
 
 indexRouter.use('/public', express.static(__dirname + '/public'))
 indexRouter.use('/upload', multerRouter)
@@ -30,12 +30,7 @@ indexRouter.use('/api/users', userRouter)
 indexRouter.use('/api/session', sessionRouter)
 
 // Vistas
-indexRouter.use('/cart', viewsRouter, express.static(__dirname + '/public'))
-indexRouter.use('/home', viewsRouter, express.static(__dirname + '/public'))
-indexRouter.use('/login', viewsRouter, express.static(__dirname + '/public'))
-indexRouter.use('/register', viewsRouter, express.static(__dirname + '/public'))
-indexRouter.use('/ticket', viewsRouter, express.static(__dirname + '/public'))
-indexRouter.use('/error', viewsRouter, express.static(__dirname + '/public'))
+// indexRouter.use('/front', viewsRouter, express.static(__dirname + '/public'))
 
 
 

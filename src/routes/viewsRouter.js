@@ -11,16 +11,16 @@ const viewsRouter = Router()
 
 viewsRouter.get('/', getProductos)
 
-viewsRouter.get('/', cartView)
+viewsRouter.get('/cart', cartView)
 
-viewsRouter.get('/', homeView)
+viewsRouter.get('/home', homeView)
 
-viewsRouter.get('/', loginView)
+viewsRouter.get('/login', loginView)
 
-viewsRouter.get('/', registerView)
+viewsRouter.get('/register', registerView)
 
-viewsRouter.get('/', ticketView)
+viewsRouter.get('/ticket', ticketView)
 
-viewsRouter.get('/', errorView)
+viewsRouter.get('/error', errorView)
 
 export default viewsRouter
