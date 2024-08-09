@@ -24,6 +24,34 @@ export const getProducts = async (req, res) => {
     res.status(500).send(`Error interno del servidor al consultar productos: ${error}`)
 }}
 
+
+export const createProduct = async (req, res) => {
+    
+    // const newProduct = req.body
+    // const product = await productModel.create(newProduct)
+    // console.log(product)
+
+    const {title, description, price, stock, code} = req.body
+    const newProduct = new productModel
+    console.log(JSON.stringify(req.body))
+    
+    res.send("Producto recibido")
+}
+
+// export const createProduct = async (req, res) => {
+//     try {
+//         if (req.user.role == "Admin"){
+//             const product = req.body
+//             const mensaje = await productModel.create(product)
+//             res.status(201).send(mensaje)
+//         } else {
+//             res.status(403).send("Usuario no autorizado")
+//     } 
+//         } catch (error) {
+//         res.status(500).send(`Error interno del servidor al crear el producto: ${error}`)
+//     }
+// }
+
 export const getProduct = async (req, res) => {
     try {
         const idProducto = req.params.pid 
@@ -37,21 +65,7 @@ export const getProduct = async (req, res) => {
         res.status(500).send(`Error interno del servidor al consultar producto: ${error}`)
     }
 }
-    
-export const createProduct = async (req, res) => {
-    try {
-        if (req.user.role == "Admin"){
-            const product = req.body
-            const mensaje = await productModel.create(product)
-            res.status(201).send(mensaje)
-        } else {
-            res.status(403).send("Usuario no autorizado")
-    } 
-        } catch (error) {
-        res.status(500).send(`Error interno del servidor al crear el producto: ${error}`)
-    }
-}
-    
+
 export const updateProduct = async (req, res) => {
     try {
         if (req.user.role == "Admin") {

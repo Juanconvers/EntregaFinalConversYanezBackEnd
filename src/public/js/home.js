@@ -1,4 +1,4 @@
-ocument.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
     const main = document.querySelector("main");
     main.classList.remove("flex", "items-center", "justify-center");
     loadProducts();

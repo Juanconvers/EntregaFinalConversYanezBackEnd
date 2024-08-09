@@ -9,6 +9,7 @@ const createRandomUsers = () => {
         password: faker.internet.password({ length: 20, memorable: true }),
         age: faker.helpers.rangeToNumber({ min: 18, max: 90 }),
         email: faker.internet.email(),
+        avatar: faker.image.avatarGitHub(),
         role: "user",
         cart_id: faker.string.uuid(),
         documents:faker.helpers.arrayElements(['cat', 'dog', 'mouse']),
@@ -31,41 +32,3 @@ console.log(users)
 // cart_id:,
 // documents:,
 // last_connection:
-
-
-// first_name: {
-//     type: String,
-//     required: true
-// },
-// last_name: {
-//     type: String,
-//     required: true
-// },
-// password: {
-//     type: String,
-//     required: true
-// },
-// age: {
-//     type: Number,
-//     required: true
-// },
-// email: {
-//     type: String,
-//     unique: true,
-//     index: true
-// },
-// role: {
-//     type: String,
-//     default: "User"
-// },
-// cart_id:{
-//      type: Schema.Types.ObjectId,
-//      ref: 'carts'
-// },
-// documents:{
-//     type: Object,
-//     default: []
-// },
-// last_connection:{
-//     type: Date 
-// }
