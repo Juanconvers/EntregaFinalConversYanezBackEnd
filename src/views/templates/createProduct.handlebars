@@ -1,0 +1,64 @@
+<section>
+  <div>
+    <div>
+      <h2>Cargar productos</h2>
+    </div>
+    
+    <form action="/api/products" method="POST">
+      <div>
+        <div>
+          <label for="title">Nombre del producto</label>
+          <div>
+            <input name="title" type="title" id="title" required="" value=""/>
+          </div>
+        </div>
+        
+        <div>
+          <label for="description">Descripción</label>
+          
+          <div>
+            <input name="description" type="description" id="description" required="" value=""/>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label for="price">Precio</label>
+        <div>
+          <input type="price" name="price" id="price" required="" value=""/>
+        </div>
+      </div>
+
+      <div>
+        <label for="stock">Stock</label>
+        <div class="mt-1">
+          <input type="stock" name="stock" id="stock" required="" value=""/>
+        </div>
+      </div>
+
+      <div>
+        <label for="code">Código</label>
+        <div class="mt-1">
+          <input type="code" name="code" id="code" required="" value=""/>
+        </div>
+      </div>  
+    
+      
+      <div>
+        <label for="img">Imagen del producto</label>
+        <div>
+          <input type="file" id="img" name="img" accept="image/*"/>
+          <div id="imagePreview" class="image-preview"></div>
+        </div>
+      </div>
+
+      <div>
+        <button type="submit">Cargar producto</button>
+      </div>
+
+    </form>
+    
+  </div>
+</section>
+
+<script src="/js/register.js"></script>

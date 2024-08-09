@@ -6,6 +6,7 @@ import { homeView } from "../controllers/viewsController.js";
 import { loginView } from "../controllers/viewsController.js";
 import { registerView } from "../controllers/viewsController.js";
 import { ticketView } from "../controllers/viewsController.js";
+import { createProductView } from "../controllers/viewsController.js";
 
 const viewsRouter = Router()
 
@@ -21,6 +22,10 @@ viewsRouter.get('/register', registerView)
 
 viewsRouter.get('/ticket', ticketView)
 
+viewsRouter.get('/createProduct', createProductView)
+
 viewsRouter.get('/error', errorView)
 
 export default viewsRouter
+
+

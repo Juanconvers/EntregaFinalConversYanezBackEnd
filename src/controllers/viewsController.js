@@ -58,3 +58,9 @@ export const getProductos = async (req, res) => {
             css: 'ticket.css'
         })
     }
+
+    export const createProductView = async (req, res) => {
+            res.render('templates/createProduct', {
+            css: 'createProduct.css'
+        })
+    }
