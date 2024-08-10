@@ -1,115 +1,143 @@
 import cartModel from "../models/cart.js"
 import productModel from "../models/products.js"
 import ticketModel from "../models/ticket.js"
+import crypto from 'crypto';
+import { isValidObjectId } from 'mongoose';
+
+
+        // Crear un carrito
 
 export const createCart = async (req, res) => {
     try {
         const mensaje = await cartModel.create({ products: [] })
         res.status(201).send(mensaje)
-    } catch (e) {
+    } catch (error) {
         res.status(500).send(`Error interno del servidor al crear el carrito: ${error}`)
     }
 
 }
 
+        // Consultar el carrito
+
 export const getCart = async (req, res) => {
     try {
         const cartId = req.params.cid
-        const cart = await cartModel.findOne({ _id: cartId })
-        res.status(200).send(cart)
+        if (!isValidObjectId(cartId)) {
+            return res.status(400).send('ID de carrito inválido');
+        }
+        const cart = await cartModel.findOne({ _id: cartId });
+        if (!cart) {
+            return res.status(404).send('Carrito no encontrado');
+        }
+        res.status(200).send(cart);
+
     } catch (error) {
         res.status(500).send(`Error interno del servidor al consultar carrito: ${error}`)
     }
 }
 
+    //Crear Ticket de compra
+
 export const createTicket = async (req, res) => {
     try {
-        
-        const cartId = req.params.cid
-        const cart = await cartModel.findById(cartId)
-        const prodSinStock = []
+        const cartId = req.params.cid;
+        console.log('Processing purchase for cart ID:', cartId);
+
+        const cart = await cartModel.findById(cartId);
+        const prodSinStock = [];
         if (cart) {
-            cart.products.forEach(async (prod) => {
-                let producto = await productModel.findById(prod.id_prod)
-                if (productModel.stock < prod.quantity) {
-                    prodSinStock.push(producto.id)
+
+            for (const prod of cart.products) {
+                let producto = await productModel.findById(prod.id_prod);
+                if (producto.stock < prod.quantity) {
+                    prodSinStock.push(producto);
                 }
-            })
-            if (prodSinStock.length = 0) {
-                const totalPrice = cart.products.reduce((a, b) => (a.id_prod.price * a.quantity) + (b.id_prod.price * b.quantity), 0)
-                
-                if (req.user.role == 'Premium') {
-                    totalPrice * 0.9
-                }               
-                
-                const newTicket = await ticketModel.create({
-                    code: crypto.randomUUID(),
-                    purchaser: req.user.email,
-                    amount: totalPrice,
-                    products: cart.products
-                })
-                //Descontar stock de cada uno de los productos
-                cart.products.forEach(async (prod) => {
-                    await productModel.findByIdAndUpdate(prod.id_prod, {
-                        stock: prod.quantity
-                    })
-                })
-
-                //Vaciar carrito al comprar
-                await cartModel.findByIdAndUpdate(cartId, {
-                    products: []
-                })
-
-                //Vaciar carrito
-                res.status(200).send(newTicket)
-            } else {
-                console.log(prodSinStock) //[id1, id2, id3]
-                prodSinStock.forEach((prodId) => {
-                    //[{id_prod, quantity, {}...]
-                    cart.products = cart.products.filter(pro => pro.id_prod !== prodId)
-                })
-                await cartModel.findByIdAndUpdate(cartId, {
-                    products: cart.products
-                })
-                res.status(400).send(`Productos sin stock: ${prodSinStock}`)
             }
-
-        } else {
-            res.status(404).send("Carrito no existe")
+        }else {
+              return res.status(404).send("Carrito no existe");
         }
 
+        // Si no hay productos sin stock finaliza la compra
+        if (prodSinStock.length === 0) {
+
+            const totalPrice = cart.products.reduce((total, prod) => {
+                return total + (prod.quantity * prod.price);
+            }, 0);
+
+
+        // Genera el ticket nuevo
+            const newTicket = await ticketModel.create({
+                code: crypto.randomUUID(),
+                purchaser: req.user.email,
+                amount: totalPrice,
+                products: cart.products
+            });
+            console.log('Request body:', req.body); 
+
+            res.status(200).send(newTicket)
+        } else {
+
+        res.status(400).send({ 
+            message: "Algunos productos no tienen suficiente stock", 
+            products: prodSinStock 
+        })
+ }
     } catch (e) {
-        res.status(500).send(`Error interno del servidor al crear ticket: ${e}`)
-    }
+
+    res.status(500).send(`Error interno del servidor al crear ticket: ${e.message}`);
+}
 }
 
 
 export const insertProductCart = async (req, res) => {
     try {
-        if (req.user.role == "Admin") {
+        if (req.user && (req.user.rol === "User")) {
             const cartId = req.params.cid
             const productId = req.params.pid
             const { quantity } = req.body
+            
+            if (!isValidObjectId(cartId)) {
+                return res.status(400).send('ID de carrito inválido');
+            }
+            if (!isValidObjectId(productId)) {
+                return res.status(400).send('ID de producto inválido');
+            }       
+            
             const cart = await cartModel.findById(cartId)
 
-            const indice = cart.products.findIndex(product => product.id_prod == productId)
-
-            if (indice != -1) {
-                //Consultar Stock para ver cantidades
-                cart.products[indice].quantity += quantity //5 + 5 = 10, asigno 10 a quantity
-            } else {
-                cart.products.push({ id_prod: productId, quantity: quantity })
+            if (!cart) {
+                return res.status(404).send("Carrito no encontrado");
             }
-            const mensaje = await cartModel.findByIdAndUpdate(cartId, cart)
-            res.status(200).send(mensaje)
+
+            const product = await productModel.findById(productId);
+            if (!product) {
+                return res.status(404).send('Product not found');
+            }
+
+              const indice = cart.products.findIndex(product => product.id_prod == productId);
+
+
+            if (indice !== -1) {
+                cart.products[indice].quantity += quantity;
+            } else {
+
+                cart.products.push({ id_prod: productId, quantity: quantity });
+            }
+
+            console.log('Cart before update:', cart);
+            const updatedCart = await cartModel.findByIdAndUpdate(cartId, { products: cart.products }, { new: true });
+            console.log('Updated Cart:', updatedCart);
+
+
+            res.status(200).send(updatedCart);
         } else {
-            res.status(403).send("Usuario no autorizado")
+            res.status(403).send("Usuario no autorizado");
         }
 
     } catch (error) {
-        res.status(500).send(`Error interno del servidor al insertar el producto: ${error}`)
+        console.error('Error updating cart:', error);
+        res.status(500).send(`Error interno del servidor al actualizar carrito: ${error.message}`);
     }
-
 }
 
 export const deleteFromCart = async (req, res) => {

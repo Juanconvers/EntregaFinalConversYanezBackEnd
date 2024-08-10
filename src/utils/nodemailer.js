@@ -29,7 +29,7 @@ export const sendEmailRecoverPassword = async(email, linkChangePassword) => {
         `   
        }
 
-        8// Se envía el email
+    // Se envía el email
        transporter.sendMail(mailOption, (error, info) => {
             if(error) {
                 console.log("Error al enviar email para reestablecer contraseña")
