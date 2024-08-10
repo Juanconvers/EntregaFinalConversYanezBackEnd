@@ -1,24 +1,143 @@
 import userModel from "../models/user.js"
 import { sendEmailRecoverPassword } from "../utils/nodemailer.js";
 import jwt from 'jsonwebtoken'
-import {validatePassword, createHash} from "../utils/bcrypt.js"
+import { validatePassword, createHash } from "../utils/bcrypt.js"
+
+        // Login 
 
 export const login = async (req, res) => {
     try {
-        if(!req.user){
-            return res.status(401).send("Usuario o contraseña invalidos")
+        if (!req.user) {
+            return res.status(401).json({ error: "Usuario o contraseña no válidos" });
         }
+
+        const token = generateToken(req.user);
+        console.log(token)
+
         req.session.user = {
             email: req.user.email,
-            password: req.user.password
+            name: req.user.name,
+            rol: req.user.rol,
+            cartId: req.user.cart_id || null
         }
-        
-        const token = jwt.sign(req.session.user,'tokenSecretJWT',{expiresIn:"1h"});
-        res.cookie('coderCookie',token,{maxAge:3600000, httpOnly: true});
-       
-        res.status(200).send({status:"success", message: "Usuario logueado correctamente"})
+
+        res.status(200).json({
+            message: "Usuario logueado correctamente",
+            token: token,
+            rol: req.user.rol,
+            cartId: req.user.cart_id
+        });
+
     } catch (e) {
-        res.status(500).send("Error al loguear usuario" +e)
+        res.status(500).json({ error: "Error al loguear usuario" });
+    }
+}
+
+        // Registr
+
+export const register = async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(400).json("Usuario ya existente en la aplicación");
+        }
+        res.status(200).json("Usuario creado correctamente");
+
+    } catch (e) {
+        res.status(500).json("Error al registrar usuario");
+    }
+}
+
+// {
+//     "first_name":"Carlos",
+//     "last_name": "Agosto",
+//     "email": "carlos7agosto@gmail.com",
+//     "password": "Sisenor95"
+// }
+
+export const logout = async (req, res) => {
+    const user = await userModel.findOne({ email: req.session.user.email })
+    user.last_connection = new Date()
+    await user.save()
+
+    req.session.destroy(function (e) {
+        if (e) {
+            console.log(e)
+        } else {
+            res.status(200).redirect("/")
+        }
+    })
+}
+
+        // Ruta GITHUB
+
+export const sessionGithub = async (req, res) => {
+
+    req.session.user = {
+        email: req.user.email,
+        first_name: req.user.name
+    }
+    res.redirect('/')
+}
+
+        // Ruta JWT
+
+export const testJWT = async (req, res) => {
+    console.log("Desde testJWT" + req.user)
+    if (req.user.role == 'User')
+        res.status(403).send("Usuario no autorizado")
+    else
+        res.status(200).send(req.user)
+}
+
+        // RECUPERAR LA CONTRASEÑA
+
+export const recoverPassword = async (req, res) => {
+    const { token } = req.params
+    const { newPassword } = req.body
+
+    try {
+                // Verifica y decodifica el token JWT
+
+        const validateToken = jwt.verify(token.substr(6,), varenv.secret)
+        const user = await userModel.findOne({ email: validateToken.userEmail })
+        if (user) {
+            if (!validatePassword(newPassword, user.password)) {
+                const hashPassword = createHash(newPassword)
+                user.password = hashPassword
+                const resultado = await userModel.findByIdAndUpdate(user._id, user)
+                console.log(resultado)
+                res.status(200).send("Contraseña modificada correctamente")
+            } else {
+                res.status(400).send("La contraseña es igual a la anterior")
+            }
+        } else {
+            res.status(404).send("Usuario no encontrado")
+        }
+    } catch (e) { 
+        console.log(e)
+        if (e?.message == 'jwt expired') {
+            res.status(400).send("Paso el tiempo maximo para recuperar la contraseña. Se enviara otro mail a tu casilla de correo")
+        }
+        res.status(500).send(e)
+    }
+}
+
+export const sendEmailPassword = async (req, res) => {
+
+    try {
+        const { email } = req.body
+        const user = await userModel.find({ email: email })
+
+        if (user) {
+            const token = jwt.sign({ userEmail: email }, varenv.secret, { expiresIn: '1h' })
+            const resetLink = `http://localhost:11000/api/session/reset-password?token=${token}`
+            sendEmailRecoverPassword(email, resetLink)
+            res.status(200).send("Email enviado satisfactoriamente")
+        } else {
+            res.status(404).send("Usuario No encontrado")
+        }
+    } catch (e) {
+        res.status(500).send(e)
     }
 }
 
@@ -34,112 +153,6 @@ export const login = async (req, res) => {
 //     }
 
 // })
-
-export const register = async (req, res) => {
-    try {
-        const { first_name, last_name, email, password } = req.body;
-        if (!first_name || !last_name || !email || !password) return res.status(400).send({ status: "error", error: "Valores incompletos" });
-        // const exists = await getUserByEmail(email);
-        if (exists) return res.status(400).send({ status: "error", error: "El usuario ya existe" });
-        const hashedPassword = createHash(password);
-        const user = {
-            first_name,
-            last_name,
-            email,
-            password: hashedPassword
-        }
-        // let result = await create(user);
-        console.log(result);
-        res.send({ status: "success", payload: result._id });
-    } catch (error) {
-        res.status(500).send("Error al registrar al usuario "+ error)
-    }
-}
-
-// {
-//     "first_name":"Carlos",
-//     "last_name": "Agosto",
-//     "email": "carlos7agosto@gmail.com",
-//     "password": "Sisenor95"
-// }
-
-export const logout = async (req, res) => {
-    const user = await userModel.findOne({ email: req.session.user.email })
-    user.last_connection = new Date() 
-    await user.save()
-    
-    req.session.destroy((e =>
-         e ? res.status(500).send('Error al cerrar sesion') : res.status(200).redirect(/*"api/session/login" o: */ "/")
-    ))
-};
-
-export const sessionGithub = async (req, res) => {
-    
-    req.session.user = {
-        email: req.user.email,
-        first_name: req.user.name
-    }
-    res.redirect('/')
-}
- 
-export const testJWT = async (req, res) => {
-    console.log("Desde testJWT" + req.user)
-    if (req.user.role == 'User')
-        res.status(403).send("Usuario no autorizado")
-    else
-        res.status(200).send(req.user)
-}
-
-export const recoverPassword = async (req, res) => {
-   const { token } = req.params
-   const { newPassword } = req.body
-
-   try{
-        const validateToken = jwt.verify( token.substr(6,),"coder")
-        const user = await userModel.find({email: validateToken.userEmail})
-        if(user){
-            if(!validatePassword(newPassword, user.password)){
-                const hashPassword = createHash(newPassword)
-                user.password = hashPassword
-                const resultado = await userModel.findByIdAndUpdate(user._id, user)
-                console.log(resultado)
-                res.status(200).send("Contraseña modificada correctamente")
-            }else{
-                
-                res.status(400).send("La contraseña es igual a la anterior")
-
-            }
-        }else{ 
-            res.status(404).send("Usuario no encontrado")
-        }
-   }catch (e){
-        res.status(500).send('Error al cambiar contraseña: ', error)
-        if(e?.message == 'jwt.expired'){
-            res.status(400).send("El tiempo para recuperar la contraseña ha expirado. Use nuevo token")
-        }
-        res.status(500).send(e)
-   }
-    
-}
-
-export const sendEmailPassword = async (req, res) => {
-    
-    try{
-        const {email} = req.body
-        const user = await userModel.find({email: email}) 
-        
-        if (user){
-            const token = jwt.sign({userEmail: email}, "coder", {expiresIn: '1h'})
-            const resetLink = `http://localhost:11000/api/session/reset-password?token=${token}`
-            sendEmailRecoverPassword(email, resetLink)
-            res.status(200).send("Email enviado satisfactoriamente") 
-        }else{
-            res.status(404).send("Usuario No encontrado")
-        }
-    }catch (e){
-        res.status(500).send(e)
-    }
-}
 
 // export const register = async (req, res) => {
 //     try {
@@ -158,7 +171,7 @@ export const sendEmailPassword = async (req, res) => {
 // })
 
 
-// Viene desde el app.js 
+// Viene desde el app.js
 
 // Session Routes
 

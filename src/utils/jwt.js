@@ -5,6 +5,7 @@ export const generateToken = (user) => {
 
     
     const token = jwt.sign({ user }, varenv.jwt_secret, { expiresIn: '12h' })
+    console.log(token)
     return token
 }
 
