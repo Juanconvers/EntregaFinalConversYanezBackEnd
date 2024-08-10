@@ -3,7 +3,7 @@
         <div class="card mt-5 bg-black text-black rounded">
             <div class="card-header text-center pt-5">
                 <h1 class="h4 text-black">
-                    LOGIN
+                    INICIAR SESIÓN
                 </h1>
                 <h2 class="h4 text-black">
                     Entre a su cuenta
@@ -20,8 +20,8 @@
                         <label for="passswore">Contraseña:</label>
                         <input type="password" class="form-control bg-white text-black" name="password"/>
                     </div>
-                    <button class="btn btn-success btn-block">
-                        Signin
+                    <button type="submit" class="btn btn-success btn-block">
+                        Iniciar Sesión
                     </button>
                 </form>
                     <button id="githubLogin" class="btn btn-success btn-block">
@@ -30,13 +30,14 @@
                     </div>
                         <p id="passwordError" class="text-red-500 text-sm mt-1 hidden"></p>
                     <div>
-                        <a href="/resetpass">¿Olvidó su contraseña?</a>
+                        <a href="../userside/recoverPass">¿Olvidó su contraseña?</a>
                     </div>    
 
 
                     <div id="register">
                         <p>Si ya es usuario de nuestro servicio, iniciar sesión
-                            <a class="hover:underline" href="/register">Ir a Registro</a>
+                            <br>
+                            <a class="hover:underline" href="/index">Ir a Registro</a>
                         </p>
                     </div>  
             </div>

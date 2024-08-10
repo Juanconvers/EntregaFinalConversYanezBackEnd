@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-md-4 mx-auto">
+        <div class="card mt-5 bg-black text-black rounded">
+            <div class="card-header text-center pt-5">
+                <h1 class="h4 text-black">
+                    RECUPERAR CONTRASEÑA
+                </h1>
+                <h2 class="h4 text-black">
+                    Ingrese su nueva contraseña:
+                </h2>
+            </div>
+
+            <div class="card-body">
+                
+                <form action="/auth/signin" method="POST">
+                    <div class="mb-3">
+                        <label for="passswore">Contraseña:</label>
+                        <input type="password" class="form-control bg-white text-black" name="password"/>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">
+                        Cambiar contraseña
+                    </button>
+                </form>
+ 
+            </div>
+        </div>
+    </div>
+</div>
