@@ -1,68 +1,66 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM loaded");
-    const formLogin = document.querySelector("#loginForm");
-    const emailInput = document.querySelector('input[name="email"]');
-    const passwordInput = document.querySelector('input[name="password"]');
-    const rememberCheckbox = document.querySelector("#remember");
-    const passwordError = document.querySelector("#passwordError");
-    const githubLogin = document.querySelector("#githubLogin");
-  
-    // Load saved data when the page loads
-    emailInput.value = localStorage.getItem("email") || "";
-    rememberCheckbox.checked = localStorage.getItem("remember") === "true";
-  
-    formLogin.addEventListener("submit", async (event) => {
-      console.log("form submitted");
-      event.preventDefault();
-  
-      // Reset error message
-      passwordError.textContent = "";
-      passwordError.classList.add("hidden");
-  
-      // Set local storage according to checkbox status
-      if (rememberCheckbox.checked) {
-        console.log("remembered, saving to localstorage");
-        localStorage.setItem("email", emailInput.value);
-        localStorage.setItem("remember", "true");
-      } else {
-        localStorage.removeItem("email");
-        localStorage.removeItem("remember");
-      }
-  
-      try {
-        const response = await fetch("/api/sessions", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams(new FormData(formLogin)),
-        });
-  
-        const data = await response.json();
-        console.log(response.status);
-  
-        if (response.status === 201) {
-          console.log("response successful");
-          window.location.href = "/home";
-        } else if (response.status === 401) {
-          console.log("authentication failed");
-          passwordError.textContent = data.message;
-          passwordError.classList.remove("hidden");
-          passwordInput.value = ""; // Clear the password field
+
+const loginForm = document.getElementById('loginForm')
+
+loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value
+    const password = document.getElementById('password').value
+
+    if (!email || !password) {
+    try {
+        const response = await fetch('/api/session/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+            credentials: 'include'
+        })
+
+        if (!response.ok) {
+            return(error);
         }
-      } catch (error) {
-        console.error("Error during login:", error);
-        passwordError.textContent =
-          "Email or password incorrect. Please try again.";
-        passwordError.classList.remove("hidden");
-        passwordInput.value = ""; // Clear the password field
-      }
-    });
-  
-    githubLogin.addEventListener("click", (event) => {
-      console.log("github login clicked");
-      event.preventDefault();
-  
-      // GitHub 
-      window.location.href = "/api/sessions/auth/github";
-    });
-  });
-  
+        const data = await response.json()
+        
+        console.log("DATA: LOGIN: ", data)
+
+            console.log("Token:", data.token)
+            console.log("Role:", data.role)
+            console.log("cartId:", data.cartId)
+            
+        if (data.token && data.role && data.cartId) {
+            localStorage.setItem('token', data.token)
+            localStorage.setItem('role', data.role)
+            localStorage.setItem('cartId', data.cartId)
+
+            const cartResponse = await fetch(`/api/cart/${data.cartId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${data.token}`
+                }
+            })
+
+            if (!cartResponse.ok) {
+                console.error('Error al obtener el carrito')
+            } else {
+                const cartData = await cartResponse.json()
+                console.log('Datos del carrito:', cartData)
+            } return (() => {
+
+                if (data.role === 'Admin') {
+                    window.location.href = '/adminPanel' 
+                    console.log('Logeaste como Admin man')
+                } else {
+                    window.location.href = '/home'
+                }
+            })
+            } else {
+                console.log("Faltan datos: token, rol o cartId no están presentes")
+            }
+        } catch (error) {
+            console.error('Error:', error)
+        }
+    }
+})

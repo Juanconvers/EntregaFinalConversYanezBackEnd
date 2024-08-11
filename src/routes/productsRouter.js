@@ -11,7 +11,7 @@ productsRouter.get('/:pid', getProduct)
 
 productsRouter.post('/', createProduct)
 
-// productsRouter.post('/', passport.authenticate('jwt', { session: false}), createProduct)
+productsRouter.post('/', passport.authenticate('jwt', { session: false}), createProduct)
 
 productsRouter.put('/:pid', passport.authenticate('jwt', { session: false}), updateProduct)
 

@@ -3,7 +3,7 @@ import { sendEmailRecoverPassword } from "../utils/nodemailer.js";
 import jwt from 'jsonwebtoken'
 import { validatePassword, createHash } from "../utils/bcrypt.js"
 
-        // Login 
+// Login 
 
 export const login = async (req, res) => {
     try {
@@ -33,7 +33,7 @@ export const login = async (req, res) => {
     }
 }
 
-        // Registr
+// Registr
 
 export const register = async (req, res) => {
     try {
@@ -68,7 +68,7 @@ export const logout = async (req, res) => {
     })
 }
 
-        // Ruta GITHUB
+// Ruta GITHUB
 
 export const sessionGithub = async (req, res) => {
 
@@ -79,7 +79,7 @@ export const sessionGithub = async (req, res) => {
     res.redirect('/')
 }
 
-        // Ruta JWT
+// Ruta JWT
 
 export const testJWT = async (req, res) => {
     console.log("Desde testJWT" + req.user)
@@ -89,14 +89,29 @@ export const testJWT = async (req, res) => {
         res.status(200).send(req.user)
 }
 
-        // RECUPERAR LA CONTRASEÑA
+// Verificación de inicio de sesión
+
+export const current = async (req, res) => {
+    try {
+        if (req.user) {
+            console.log(req)
+            res.status(200).json("Usuario logueado");
+        } else {
+            res.status(401).json("Usuario no autenticado");
+        }
+    } catch (e) {
+        res.status(500).json("Error al verificar usuario actual");
+    }
+}
+
+// RECUPERAR LA CONTRASEÑA
 
 export const recoverPassword = async (req, res) => {
     const { token } = req.params
     const { newPassword } = req.body
 
     try {
-                // Verifica y decodifica el token JWT
+        // Verifica y decodifica el token JWT
 
         const validateToken = jwt.verify(token.substr(6,), varenv.secret)
         const user = await userModel.findOne({ email: validateToken.userEmail })
@@ -113,7 +128,7 @@ export const recoverPassword = async (req, res) => {
         } else {
             res.status(404).send("Usuario no encontrado")
         }
-    } catch (e) { 
+    } catch (e) {
         console.log(e)
         if (e?.message == 'jwt expired') {
             res.status(400).send("Paso el tiempo maximo para recuperar la contraseña. Se enviara otro mail a tu casilla de correo")

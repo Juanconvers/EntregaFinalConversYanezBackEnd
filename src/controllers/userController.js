@@ -6,7 +6,7 @@ export const getUsers = async (req, res) => {
     
     try {
         console.log("Usando getUsers");
-        const users = await userModel.find({}, 'name email rol -_id -cart_id')
+        const users = await userModel.find({}, 'name email role -_id -cart_id')
         console.log("Usuarios obtenidos de DB:", users)
         const usersWithoutCartId = users.map(user => {
             return {

@@ -65,7 +65,7 @@ export const createTicket = async (req, res) => {
             }, 0);
 
 
-        // Genera el ticket nuevo
+        // Generar el ticket nuevo
             const newTicket = await ticketModel.create({
                 code: crypto.randomUUID(),
                 purchaser: req.user.email,
@@ -91,7 +91,7 @@ export const createTicket = async (req, res) => {
 
 export const insertProductCart = async (req, res) => {
     try {
-        if (req.user && (req.user.rol === "User")) {
+        if (req.user && (req.user.role === "User")) {
             const cartId = req.params.cid
             const productId = req.params.pid
             const { quantity } = req.body

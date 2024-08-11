@@ -10,7 +10,7 @@
         </h2>
       </div>
       <div class="card-body">
-        <form action="/auth/signup" id="registerForm" class="register-form" method="POST">
+        <form id="registerForm" class="register-form">
           <div class="mb-3">
             <label for="name">Nombre:</label>
             <input
@@ -60,7 +60,7 @@
               value="{{password}}"
             />
 
-          <button type="submit" class="btn btn-success btn-block">
+          <button href="/login" type="submit" class="btn btn-success btn-block">
             Registrarse
           </button>
         </form>

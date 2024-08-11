@@ -17,12 +17,12 @@ export const getProducts = async (req, res) => {
     const query = metFilter != undefined ? { [metFilter]: filter } : {};
     const ordQuery = ord !== undefined ? { price: ord } : {};
     const prods = await productModel.paginate(query, { limit: limi, page: pag, sort: ordQuery });
-    const prodsJSON = prods.docs.map(prod => prod.toJSON())
+    const prodsJSON = prods.docs.map(prod => prod)
     
     res.status(200).send(prodsJSON)
     console.log(prods)
 } catch (error){
-    res.status(500).send(`Error interno del servidor al consultar productos: ${error}`)
+    res.status(500).send(`Error interno del servidor al consultar los productos: ${error}`)
 }}
 
 
@@ -46,7 +46,7 @@ export const createProduct = async (req, res) => {
     console.log(req.user.rol)
 
     try {
-        if (req.user && req.user.rol === "Admin"){
+        if (req.user && req.user.role === "Admin"){
             const product = req.body
             const mensaje = await productModel.create(product)
             res.status(201).send(mensaje)
@@ -74,7 +74,7 @@ export const getProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     try {
-        if (req.user && req.user.rol === "Admin") {
+        if (req.user && req.user.role === "Admin") {
             const idProducto = req.params.pid
             const updateProduct = req.body
             const prod = await productModel.findByIdAndUpdate(idProducto, updateProduct, { new: true })
@@ -108,7 +108,7 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
     try {
         console.log(req.user.rol)
-        if (req.user && req.user.rol === "Admin") {
+        if (req.user && req.user.role === "Admin") {
             const idProducto = req.params.pid
             const mensaje = await productModel.findByIdAndDelete(idProducto)
             if (!mensaje) {

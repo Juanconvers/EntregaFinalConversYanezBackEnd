@@ -1,123 +1,155 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const main = document.querySelector("main");
-    main.classList.remove("flex", "items-center", "justify-center");
-    loadProducts();
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('/api/products', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Problema de red');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+                if (Array.isArray(data.docs)) {
+                const container = document.getElementById('products-container');
+                const imageBaseUrl = '/img/products/';
+                container.innerHTML = data.docs.map(product => {
+                    const imageUrl = `${imageBaseUrl}${product.thumbnail}`;
+                    console.log(`Image URL: ${imageUrl}`);
+
+                    return `
+                    <div class="product">
+                        <img src="${imageUrl}" alt="${product.title}" />
+                        <h2>${product.title}</h2>
+                        <p>${product.description}</p>
+                        <p>Price: $${product.price}</p>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" data-action="decrement" data-id="${product._id}">-</button>
+                            <span class="quantity" id="quantity-${product._id}">0</span>
+                            <button class="quantity-btn" data-action="increment" data-id="${product._id}">+</button>
+                        </div>
+                        <button class="add-to-cart" data-id="${product._id}">Add to Cart</button>
+                    </div>
+                `;
+                }).join('');
+
+                document.querySelectorAll('.quantity-btn').forEach(button => {
+                    button.addEventListener('click', handleQuantityChange);
+                });
+                document.querySelectorAll('.add-to-cart').forEach(button => {
+                    button.addEventListener('click', handleAddToCart);
+                });
+            } else {
+                console.error('No llegó un array, llegó:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener productos:', error);
+        });
 });
 
-async function loadProducts() {
-    try {
-      const url = new URL(window.location.href);
-      const category = url.searchParams.get("category");
-      const search = url.searchParams.get("search");
-      let apiUrl = "/api/products";
-  
-      if (category) {
-        apiUrl += `?category=${encodeURIComponent(category)}`;
-      }
-      if (search) {
-        apiUrl += category ? "&" : "?";
-        apiUrl += `search=${encodeURIComponent(search)}`;
-        currentSearch = search;
-      }
-  
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-  
-      if (data && data.payload && Array.isArray(data.payload)) {
-        products = data.payload;
-      } else {
-        console.error(
-          "data format is not valid. Expected an array in payload:",
-          data
-        );
-        products = [];
-      }
-  
-      renderProducts(products);
-      updateClearSearchButtonVisibility();
-    } catch (error) {
-      console.error("Error loading products:", error);
-      productGrid.innerHTML =
-        "<p class=dark:text-gray-300>Error loading products.</p>";
-    }
-  }
-  
+        // Función para agregar una cantidad de un producto
 
-  function renderProducts(productsToRender) {
-    if (!Array.isArray(productsToRender)) {
-      console.error("renderProducts got an invalid argument:", productsToRender);
-      productGrid.innerHTML =
-        "<p class=dark:text-gray-300>Error rendering products.</p>";
-      return;
+function handleQuantityChange(event) {
+    const button = event.target;
+    const action = button.getAttribute('data-action');
+    const productId = button.getAttribute('data-id');
+    const quantityElement = document.getElementById(`quantity-${productId}`);   
+    const quantity = parseInt(quantityElement.textContent);
+    console.log(`Quantity for product ${productId}:`, quantity);
+
+    if (action === 'increment') {
+        quantity += 1;
+    } else if (action === 'decrement' ) {
+        quantity = Math.max(0, quantity - 1);
     }
-  
-    if (productsToRender.length === 0) {
-      productGrid.innerHTML =
-        "<p class=dark:text-gray-300> No products were found.</p>";
-      return;
-    }
-  
-    productGrid.innerHTML = productsToRender
-      .map(
-        (product) => `
-      <div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
-        <img src="${getFirstValidThumbnail(
-          product.thumbnails
-        )}" alt="Product image" width="400" height="400" class="rounded-t-lg object-cover w-full h-56" style="aspect-ratio: 400 / 400; object-fit: cover;">
-        <div class="p-4 flex flex-col flex-grow">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-50">${
-            product.title
-          }</h3>
-          <p class="text-gray-500 dark:text-gray-400 mb-4 flex-grow">${
-            product.description
-          }</p>
-          <div class="flex items-center justify-between mt-auto">
-            <span class="text-xl font-bold text-gray-900 dark:text-gray-50">${formatPrice(
-              product.price
-            )}</span>
-            <button class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-9 rounded-md px-3 bg-gray-400 text-gray-50 hover:bg-gray-600 dark:bg-primary-400 dark:text-gray-900 dark:hover:bg-primary-500" type="button" onclick="addProductToCart(event, '${
-              product._id
-            }')">
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      </div>
-    `
-      )
-      .join("");
-  }
+
+    console.log(`Cantidad de producto actualizada ${productId}:`, quantity);
 
 
-function setupClearSearchButton() {
-    const filterButton = document.querySelector("#filter-button");
-    if (filterButton) {
-      const clearSearchButton = document.createElement("button");
-      clearSearchButton.id = "clear-search-button";
-      clearSearchButton.className = filterButton.className; // use same classes as filter button
-      clearSearchButton.classList.add(
-        "dark:text-gray-300",
-        "hover:border-red-500"
-      );
-      clearSearchButton.textContent = "Clear Search";
-      clearSearchButton.style.display = "none";
-      filterButton.parentNode.insertBefore(clearSearchButton, filterButton);
-  
-      clearSearchButton.addEventListener("click", clearSearch);
-    }
-  }
-  
+    quantityElement.textContent = quantity;
+}
 
-  function clearSearch() {
-    const url = new URL(window.location.href);
-    url.searchParams.delete("search");
-    window.history.pushState({}, "", url);
-    currentSearch = "";
-    const searchInput = document.querySelector(".search-input");
-    const pageTitleCategory = document.querySelector("#titleProductsPage");
-    pageTitleCategory.textContent = "All Products";
-    if (searchInput) {
-      searchInput.value = "";
+        // Función para agregar productos al carro
+
+function handleAddToCart(event) {
+    const button = event.target;
+    const productId = button.getAttribute('data-id');
+    const quantity = parseInt(document.getElementById(`quantity-${productId}`).textContent);
+    const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+    const product = {
+        _id: productId,
+        title: button.parentElement.querySelector('h2').textContent,
+        description: button.parentElement.querySelector('p').textContent,
+        price: parseFloat(button.parentElement.querySelector('p').textContent.replace('Price: $', '')),
+        quantity: quantity,
+
+    };
+    const existingProductIndex = cartItems.findIndex(item => item.id === productId);
+
+    if (existingProductIndex > -1) {
+        cartItems[existingProductIndex].quantity += quantity;
+    } else {
+        cartItems.push(product);
     }
-    loadProducts();
-  }
+    
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+    incrementCartCount();
+    incrementCartCount(quantity);
+
+    console.log(`Cantidad:`, quantity);
+    console.log(`Cantidad desde agregar producto ${productId}:`, quantity);
+
+    const token = localStorage.getItem('token');
+    const cartId = localStorage.getItem('cartId');
+
+    console.log('Cart ID:', cartId);
+    if (!token) {
+
+                window.location.href = '/login';
+            }
+        return;
+    }
+
+
+    console.log(`Quantity before adding to cart: ${quantity}`);
+    if (quantity > 0 && cartId) {
+
+        fetch(`http://localhost:8000/api/cart/${cartId}/products/${productId}`, {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json', 
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ quantity: quantity }), 
+            credentials: 'include'
+        })
+            .then(response => {
+                console.log(cartId)
+                if (!response.ok) {
+                    throw new Error('Problema en la red')
+                 }
+                return response.json()
+            })
+            .then(result => {
+                console.log(productId)
+                if (result) {
+                    document.getElementById(`quantity-${productId}`).textContent = '0'
+                    incrementCartCount(quantity)
+                    console.log('Unable to add item to cart.')
+                } else {
+                console.log('No es posible agregar el producto al carrito.')
+                }
+            })
+            .catch(error => {
+                console.error('Error agregando productos al carrito:', error)
+            })
+    } else {
+        console.error('Cantidad en cart ID invalida:', { quantity, cartId })
+    }
+
+
