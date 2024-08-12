@@ -15,7 +15,7 @@ export const getUsers = async (req, res) => {
                 role: user.role
             };
         });
-        console.log("Usuarios después de mapear (sin cart_id):", usersWithoutCartId); // Verificar los datos después del mapeo
+        console.log("Usuarios obtenidos):", usersWithoutCartId); // Verificar los datos después del mapeo
         
         res.status(200).send(usersWithoutCartId)
         } catch (e) {

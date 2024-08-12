@@ -41,8 +41,20 @@ export const ticketView = async (req, res) => {
 
 //  Vistas del lado del administrador        
 
-export const createProductView = async (req, res) => {
-    res.render('templates/adminside/createProduct', {
+export const adminPanelView = async (req, res) => {
+    res.render('templates/adminside/adminPanel', {
+        css: 'createProduct.css'
+    })
+}
+
+export const adminUsersView = async (req, res) => {
+    res.render('templates/adminside/adminUsers', {
+        css: 'createProduct.css'
+    })
+}
+
+export const createEditProductView = async (req, res) => {
+    res.render('templates/adminside/createEditProduct', {
         css: 'createProduct.css'
     })
 }
