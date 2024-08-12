@@ -20,7 +20,7 @@ const initializePassport = () => {
             if (findUser) {
                 return done(null, false)
             } else {
-                const user = await userModel.create({ first_name, last_name, email, age, email, password: createHash(password) })
+                const user = await userModel.create({ first_name, last_name, email, age, password: createHash(password) })
                 return done(null, user)
             }
         } catch (e) {
@@ -54,7 +54,7 @@ const initializePassport = () => {
                 user.last_connection = new Date()
                 await user.save()
                 return done(null, user)
-                
+
                 } else {
                     return done (null, false)
                 }

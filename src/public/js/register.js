@@ -19,7 +19,7 @@ registerForm.addEventListener('submit', (event) => {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response not OK')
+            throw new Error('Respuesta Not OK')
         }
         return response.json()
     })

@@ -11,20 +11,15 @@ import { createProductView } from "../controllers/viewsController.js";
 const viewsRouter = Router()
 
 viewsRouter.get('/register', registerView)
-
-viewsRouter.get('/home', renderProducts)
-
-viewsRouter.get('/cart', cartView)
-
-// viewsRouter.get('/home', homeView)
-
 viewsRouter.get('/login', loginView)
 
 
-
+viewsRouter.get('/home', renderProducts)
+viewsRouter.get('/cart', cartView)
 viewsRouter.get('/ticket', ticketView)
 
 viewsRouter.get('/createProduct', createProductView)
+
 
 viewsRouter.get('/error', errorView)
 

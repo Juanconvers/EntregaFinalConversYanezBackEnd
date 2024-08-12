@@ -33,7 +33,7 @@ export const login = async (req, res) => {
     }
 }
 
-// Registr
+// Registro
 
 export const register = async (req, res) => {
     try {
@@ -47,12 +47,6 @@ export const register = async (req, res) => {
     }
 }
 
-// {
-//     "first_name":"Carlos",
-//     "last_name": "Agosto",
-//     "email": "carlos7agosto@gmail.com",
-//     "password": "Sisenor95"
-// }
 
 export const logout = async (req, res) => {
     const user = await userModel.findOne({ email: req.session.user.email })
@@ -155,6 +149,14 @@ export const sendEmailPassword = async (req, res) => {
         res.status(500).send(e)
     }
 }
+
+
+// {
+//     "first_name":"Carlos",
+//     "last_name": "Agosto",
+//     "email": "carlos7agosto@gmail.com",
+//     "password": "Sisenor95"
+// }
 
 // app.post('/login', (req, res) => {
 //     const { email, password } = req.body
