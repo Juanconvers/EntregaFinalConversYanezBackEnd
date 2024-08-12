@@ -88,6 +88,7 @@ export const createTicket = async (req, res) => {
 }
 }
 
+// Agregar producto al carrito
 
 export const insertProductCart = async (req, res) => {
     try {

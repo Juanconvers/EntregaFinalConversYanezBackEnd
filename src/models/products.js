@@ -34,6 +34,7 @@ const productSchema = new Schema({
         required: true
     },
     thumbnail: {
+        // type: String,
         default: []
     }
 })

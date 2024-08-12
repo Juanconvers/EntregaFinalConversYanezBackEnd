@@ -20,30 +20,19 @@ export const getProducts = async (req, res) => {
     const prodsJSON = prods.docs.map(prod => prod)
     
     res.status(200).send(prodsJSON)
-    console.log(prods)
+
+    // console.log(prods)
 } catch (error){
     res.status(500).send(`Error interno del servidor al consultar los productos: ${error}`)
 }}
 
 
-// export const createProduct = async (req, res) => {
-    
-//     const newProduct = req.body
-//     const product = await productModel.create(newProduct)
-//     console.log(product)
-
-//     const {title, description, price, stock, code} = req.body
-//     const newProduct = new productModel
-//     console.log(JSON.stringify(req.body))
-    
-//     res.send("Producto recibido")
-// }
 
 export const createProduct = async (req, res) => {
     
     console.log(req.user)
    //Qué da?
-    console.log(req.user.rol)
+    console.log(req.user.role)
 
     try {
         if (req.user && req.user.role === "Admin"){
@@ -89,7 +78,7 @@ export const updateProduct = async (req, res) => {
                 status: "success",
                 message: "Producto actualizado con éxito",
                 data: prod,
-                rol: req.user.rol
+                role: req.user.role
             });
         } else {
             res.status(403).json({
@@ -107,7 +96,7 @@ export const updateProduct = async (req, res) => {
     
 export const deleteProduct = async (req, res) => {
     try {
-        console.log(req.user.rol)
+        console.log(req.user.role)
         if (req.user && req.user.role === "Admin") {
             const idProducto = req.params.pid
             const mensaje = await productModel.findByIdAndDelete(idProducto)
@@ -121,7 +110,7 @@ export const deleteProduct = async (req, res) => {
                 status: "success",
                 message: "Producto eliminado con éxito",
                 data: mensaje,
-                rol: req.user.rol
+                role: req.user.role
             });
         } else {
             res.status(403).json({

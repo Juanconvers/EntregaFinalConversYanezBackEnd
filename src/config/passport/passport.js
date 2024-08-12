@@ -51,10 +51,10 @@ const initializePassport = () => {
             console.log(user)
             if (user && validatePassword(password, user.password)) {
                     
-                user.last_connection = Date.now()
-                // user = await user.save()
-
-                return done (null, user)
+                user.last_connection = new Date()
+                await user.save()
+                return done(null, user)
+                
                 } else {
                     return done (null, false)
                 }

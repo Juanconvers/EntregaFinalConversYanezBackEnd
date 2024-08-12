@@ -1,150 +1,32 @@
-
 {{>navUser}}
 
-    <main>
-        <div id="products-container"></div>
-    </main>
-
-<script src="/js/home.js"></script> 
+<h1>Productos</h1>
 
 
 
 
 
+{{#each productosRender}}
+<div id="contenedor">
 
-
-{{!-- {{#if mostrarProductos}}
-{{#each productos}}
-<div>
-    <p>Titulo: {{this.title}}</p>
-    <p>Descripcion: {{this.description}}</p>
-    <p>Precio: {{this.price}}</p>
-    <p>Stock: {{this.stock}}</p>
-    <img src="{{this.img}}" alt="Imagen de {{this.title}}">
-</div>
-{{/each}}
-{{else}}
-<p>No se pueden mostrar los productos</p>
-{{/if}}
-
-
-<br> --}}
-
-
-
-
-
-
-
-{{!-- <section>
-    <h1>Lista de productos</h1>
-    <div>
-        {{#each products}}
-        <div>
-          <img
-            src="{{thumbnail}}"
-            alt="Product image"
-            width="180"
-            height="200"
-            class="rounded-t-lg object-cover w-full h-56"
-            style="aspect-ratio: 180 / 200;"
-          />
-          <div>
-            <h3>{{title}}</h3>
-            <p>{{description}}</p>
-            <div>{{formatPrice price}}
-              <button> Agregar al carrito</button>
+            <div class="card " style="width: 18rem;">
+                <img src="{{img}}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">{{ this.title }}</h5>
+                    <p class="card-text">{{ this.description }}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">$ {{this.price}}</li>
+                    <li class="list-group-item">{{this.stock}} en stock</li>
+                </ul>
+                <!-- AGREGAR AL CARRITO -->
+                <div class="card-body">
+                    <form action="/notes/delete/{{_id}}?_method=DELETE" method="POST">
+                        <a type="submit" class="btn btn-success btn-block btn-sm" href="#" role="button">Sumar al
+                            carrito</a>
+                    </form>
+                </div>
             </div>
-          </div>
-        </div>
-      {{/each}}
-    </div>
-  </div>
-</section> --}}
 
-
-
-
-{{!-- {{#if products}}
-    <h1>Lista de productos</h1>
-{{else}}
-    <h1>No hay productos en este momento</h1>
-{{/if}}
-
-{{#each products}}
-    <div>
-        <p>{{this.title}}</p>
-        <p>{{this.description}}</p>
-        <p>{{this.code}}</p>
-        <p>{{this.price}}</p>
-        <p>{{this.status}}</p>
-        <p>{{this.stock}}</p>
-        <p>{{this.category}}</p>
-        <p>{{this.thumbnails}}</p>
-    </div>
-    <br/>
-{{/each}}
-
-
-
-{{!-- <div class="row">
-<h1>Productos para mostrar</h1>
-    {{#if mostrarProductos}}
-    {{#each productos}}
-
-    <div class="col">
-        <div class="card form-control" style="width: 18rem;">
-            <img src="{{this.thumbnail}}" alt="Imagen de {{this.title}}" class="card-img-top">
-            <div class="card-body">
-                <h5 class="card-title">{{this.title}}</h5>
-                <p class="card-text">Categoría: {{this.category}} </p>
-             -*   <p class="card-text">Descripción: {{this.description}} </p>
-                <p class="card-text">Estado: {{this.status}} </p>
-                <p class="card-text">En bodega: {{this.stock}} </p>
-                <p class="card-text">Código: {{this.code}} </p>
-                <p class="card-text">Precio: {{this.price}} </p>
-                <a href="#" class="btn btn-primary">Agregar al carrito</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-{{!-- <div>
-    <p>Titulo: </p>
-    <p>Descripción: {{this.description}}</p>
-    <p>En bodega: {{this.stock}}</p>
-    <p>Código: {{this.code}}</p>
-    <p>Precio: {{this.price}}</p>
-    <img src="{{this.img}}" alt="Imagen de {{this.title}}">
-</div> --}}
-
-{{!-- {{/each}}
-{{else}}
-<p>No se pueden mostrar los productos</p>
-{{/if}} --}}
-
-
-
-
-
-
-
-
-
-{{!-- <h1>Productos</h1>
-
-{{#if mostrarProductos}}
-{{#each productos}}
-<div>
-    <p>Titulo: {{this.title}}</p>
-    <p>Descripcion: {{this.description}}</p>
-    <p>Precio: {{this.price}}</p>
-    <p>Stock: {{this.stock}}</p>
-    <img src="{{this.img}}" alt="Imagen de {{this.title}}">
 </div>
 {{/each}}
-{{else}}
-<p>No se pueden mostrar los productos</p>
-{{/if}} --}}

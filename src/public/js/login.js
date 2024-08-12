@@ -1,66 +1,30 @@
 
-const loginForm = document.getElementById('loginForm')
-
-loginForm.addEventListener('submit', async (event) => {
+document.getElementById('loginForm').addEventListener('submit', async function (event) {
     event.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-    const email = document.getElementById('email').value
-    const password = document.getElementById('password').value
-
-    if (!email || !password) {
     try {
         const response = await fetch('/api/session/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password }),
-            credentials: 'include'
-        })
+            body: JSON.stringify({ email, password })
+        });
 
         if (!response.ok) {
-            return(error);
-        }
-        const data = await response.json()
-        
-        console.log("DATA: LOGIN: ", data)
-
-            console.log("Token:", data.token)
-            console.log("Role:", data.role)
-            console.log("cartId:", data.cartId)
-            
-        if (data.token && data.role && data.cartId) {
-            localStorage.setItem('token', data.token)
-            localStorage.setItem('role', data.role)
-            localStorage.setItem('cartId', data.cartId)
-
-            const cartResponse = await fetch(`/api/cart/${data.cartId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${data.token}`
-                }
-            })
-
-            if (!cartResponse.ok) {
-                console.error('Error al obtener el carrito')
+            const result = await response.json();
+            document.getElementById('error').textContent = result.message;
+        } else {
+            const result = await response.json();
+            if (result.role === "Admin") {
+                window.location.href = '/adminPanel';
             } else {
-                const cartData = await cartResponse.json()
-                console.log('Datos del carrito:', cartData)
-            } return (() => {
-
-                if (data.role === 'Admin') {
-                    window.location.href = '/adminPanel' 
-                    console.log('Logeaste como Admin man')
-                } else {
-                    window.location.href = '/home'
-                }
-            })
-            } else {
-                console.log("Faltan datos: token, rol o cartId no están presentes")
+                window.location.href = '/home';
             }
-        } catch (error) {
-            console.error('Error:', error)
         }
+    } catch (error) {
+        document.getElementById('error').textContent = "Datos erroneos";
     }
 })

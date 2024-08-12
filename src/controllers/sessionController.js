@@ -17,14 +17,14 @@ export const login = async (req, res) => {
         req.session.user = {
             email: req.user.email,
             name: req.user.name,
-            rol: req.user.rol,
+            role: req.user.role,
             cartId: req.user.cart_id || null
         }
 
         res.status(200).json({
             message: "Usuario logueado correctamente",
             token: token,
-            rol: req.user.rol,
+            role: req.user.role,
             cartId: req.user.cart_id
         });
 

@@ -13,10 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             console.log(data);
-                if (Array.isArray(data.docs)) {
+                if (Array(data.docs)) {
                 const container = document.getElementById('products-container');
                 const imageBaseUrl = '/img/products/';
-                container.innerHTML = data.docs.map(product => {
+                container.innerHTML = data.docs.docs(product => {
                     const imageUrl = `${imageBaseUrl}${product.thumbnail}`;
                     console.log(`Image URL: ${imageUrl}`);
 
@@ -34,6 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button class="add-to-cart" data-id="${product._id}">Add to Cart</button>
                     </div>
                 `;
+
+
+
                 }).join('');
 
                 document.querySelectorAll('.quantity-btn').forEach(button => {
@@ -119,7 +122,7 @@ function handleAddToCart(event) {
     console.log(`Quantity before adding to cart: ${quantity}`);
     if (quantity > 0 && cartId) {
 
-        fetch(`http://localhost:8000/api/cart/${cartId}/products/${productId}`, {
+        fetch(`/api/cart/${cartId}/products/${productId}`, {
             method: 'POST', 
             headers: {
                 'Content-Type': 'application/json', 

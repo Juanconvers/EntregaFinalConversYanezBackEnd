@@ -11,19 +11,18 @@
             </div>
 
             <div class="card-body">
-                <form id="loginForm">
+                <form id="loginForm" method="post">
                     <div class="mb-3">
                         <label for="email">Email:</label>
-                        <input type="email" class="form-control bg-white text-black" id="email" name="email"
-                            autofocus />
+                        <input type="email" class="form-control bg-white text-black" id="email" name="email"/>
                     </div>
                     <div class="mb-3">
-                        <label for="passswore">Contraseña:</label>
+                        <label for="passsword">Contraseña:</label>
                         <input type="password" class="form-control bg-white text-black" id="password" name="password" />
-                    </div>
-                    <button type="submit" id="submit" class="btn btn-success btn-block">
+                    </div><br>
+                    <button type="submit" id="submit" class="btn btn-primary btn-block">
                         Iniciar Sesión
-                    </button>
+                    </button><br>
                 </form>
                 <button id="githubLogin" class="btn btn-success btn-block">
                     Iniciar sesión con GitHub
@@ -37,7 +36,7 @@
             <div id="register">
                 <p>Si ya es usuario de nuestro servicio, iniciar sesión
                     <br>
-                    <a class="hover:underline" href="/index">Ir a Registro</a>
+                    <a class="hover:underline" href="/register">Ir a Registro</a>
                 </p>
             </div>
         </div>
