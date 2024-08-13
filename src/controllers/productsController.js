@@ -5,7 +5,7 @@ export const getProducts = async (req, res) => {
         const { limit, page, filter, ord } = req.query;
         let metFilter;
         const pag = page !== undefined ? page : 1;
-        const limi = limit !== undefined ? limit : 10;
+        const limi = limit !== undefined ? limit : 100;
 
         if (filter == "true" || filter == "false") {
             metFilter = "status"

@@ -86,7 +86,7 @@ const initializePassport = () => {
         }
     }))
 
-passport.use('jwt', strategyJWT)
+    passport.use('jwt', strategyJWT)
 
 }
 

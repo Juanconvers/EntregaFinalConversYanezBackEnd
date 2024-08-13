@@ -1,28 +1,36 @@
 async function fetchProducts() {
     const response = await fetch('/api/products');
     const products = await response.json();
-    const card = document.querySelector('#productsRender');
     
-    products.docs.forEach (product => {
-        const print = document.createElement('div');
-        card.innerHTML = `
-            <p>Nombre</p>
-            <div>${product.title}</div>
-            <p>Descripción</p>
-            <div>${product.description}</div>
-            <p>En Stock</p>
-            <div>${product.stock}</div>
-            <p>Categoría</p>
-            <div>${product.category}</div>
-            <p>Código</p>
-            <div>${product.code}</div>
-            <p>Precio</p>
-            <div>${product.price}</div>
-            <div>
-                <button onclick="deleteProduct('${product._id}')">Eliminar producto</button>
+    const productList = document.getElementById('productsRender');
+    productList.innerHTML = '';
+    products.forEach(product => {
+        if(!product.thumbnail) {
+            product.thumbnail = 'https://i.pinimg.com/originals/ab/ae/30/abae3096c581937d09f912b18dd19504.png'
+        }
+        const productElement = document.createElement('div');
+        productElement.innerHTML = 
+        `
+            <div class="card" style="width: 18rem;">
+                <img src="${product.thumbnail}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Nombre del producto: ${product.title}</h5>
+                    <p class="card-text">Descripción: ${product.description}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Precio: $${product.price}</li>
+                    <li class="list-group-item">Category: ${product.category}</li>
+                    <li class="list-group-item">Stock: ${product.stock}</li>
+                    <li class="list-group-item">Código: ${product.code}</li>
+                </ul>
+                <!-- AGREGAR AL CARRITO -->
+                <div class="card-body">
+                    <button onclick="deleteProduct('${product._id}')" class="btn btn-danger btn-block btn-sm">Eliminar Producto</button>         
+                </div>
             </div>
-        `;
-        div.appendChild(div);
+            `;
+            productElement.className = 'col-md-4 col-sm-3 col-12 mb-2 mt-2'
+            productList.appendChild(productElement);
     });
 }
 
@@ -32,6 +40,7 @@ async function deleteProduct(productId) {
     });
     if (response.ok) {
         fetchProducts();
+        alert('Producto eliminado exitosamente');
     } else {
         alert('Error al eliminar el producto');
     }
@@ -50,46 +59,5 @@ async function editProduct(productId) {
     document.getElementById('code').value = product.code;
     document.getElementById('price').value = product.price;
 }
-
-document.getElementById('productForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const productId = document.getElementById('productId').value;
-    const product = {
-        title: document.getElementById('title').value,
-        description: document.getElementById('description').value,
-        stock: document.getElementById('stock').value,
-        category: document.getElementById('category').value,
-        status: document.getElementById('status').value === 'true',
-        code: document.getElementById('code').value,
-        price: document.getElementById('price').value
-    };
-
-    let response;
-    if (productId) {
-        response = await fetch(`/api/products/${productId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(product)
-        });
-    } else {
-        response = await fetch('/api/products/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(product)
-        });
-    }
-
-    if (response.ok) {
-        fetchProducts();
-        document.getElementById('productForm').reset();
-    } else {
-        alert('Error al guardar el producto');
-    }
-});
 
 fetchProducts();

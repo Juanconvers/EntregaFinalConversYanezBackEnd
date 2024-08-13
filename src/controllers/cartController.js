@@ -36,8 +36,25 @@ export const getCart = async (req, res) => {
     }
 }
 
-    //Crear Ticket de compra
+//Get Ticket de compra
 
+export const getTicket = async (req, res) => {
+    try {
+        const ticketId = req.params.tid
+        if (!isValidObjectId(ticketId)) {
+            return res.status(400).send('ID de ticket inválido');
+        }
+        const ticket = await ticketModel.findOne({ _id: ticketId });
+        if (!ticket) {
+            return res.status(404).send('Ticket no encontrado');
+        }
+        res.status(200).send(ticket);
+
+    } catch (error) {
+        res.status(500).send(`Error interno del servidor al consultar ticket: ${error}`)
+    }
+}
+//Crear Ticket de compra
 export const createTicket = async (req, res) => {
     try {
         const cartId = req.params.cid;
@@ -59,9 +76,8 @@ export const createTicket = async (req, res) => {
 
         // Si no hay productos sin stock finaliza la compra
         if (prodSinStock.length === 0) {
-
             const totalPrice = cart.products.reduce((total, prod) => {
-                return total + (prod.quantity * prod.price);
+                return total + (prod.quantity * prod.id_prod.price);
             }, 0);
 
 
@@ -72,7 +88,6 @@ export const createTicket = async (req, res) => {
                 amount: totalPrice,
                 products: cart.products
             });
-            console.log('Request body:', req.body); 
 
             res.status(200).send(newTicket)
         } else {
@@ -122,7 +137,7 @@ export const insertProductCart = async (req, res) => {
                 cart.products[indice].quantity += quantity;
             } else {
 
-                cart.products.push({ id_prod: productId, quantity: quantity });
+                cart.products.push({ id_prod: productId, quantity: quantity, title: product.title, description: product.description, price: product.price});
             }
 
             console.log('Cart before update:', cart);

@@ -11,11 +11,9 @@ productsRouter.get('/:pid', getProduct)
 
 productsRouter.post('/', createProduct)
 
-productsRouter.post('/', passport.authenticate('jwt', { session: false}), createProduct)
-
 productsRouter.put('/:pid', passport.authenticate('jwt', { session: false}), updateProduct)
 
-productsRouter.delete('/:pid', passport.authenticate('jwt', { session: false}), deleteProduct)
+productsRouter.delete('/:pid', deleteProduct)
 
 export default productsRouter
 

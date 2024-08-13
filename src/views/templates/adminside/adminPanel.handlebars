@@ -2,36 +2,6 @@
 
 <h1>Productos</h1>
 
-<div id="productsRender"></div>
+<div id="productsRender" class = "row"></div>
 
 <script src="/js/adminPanel.js"></script>
-
-{{!-- <h1>Productos</h1>
-{{#each productosRender}}
-
-<div id="contenedor">
-
-    <div class="card " style="width: 18rem;">
-        <img src="{{img}}" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">{{ this.title }}</h5>
-            <p class="card-text">{{ this.description }}</p>
-        </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">$ {{this.price}}</li>
-            <li class="list-group-item">{{this.stock}} en stock</li>
-        </ul>
-        <!-- AGREGAR AL CARRITO -->
-        <div class="card-body">
-            <form action="/notes/delete/{{_id}}?_method=DELETE" method="POST">
-                <a type="submit" class="btn btn-success btn-block btn-sm" href="#" role="button">Sumar al
-                    carrito</a>
-            </form>
-        </div>
-    </div>
-
-</div>
-
-
-
-{{/each}} --}}

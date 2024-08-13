@@ -2,8 +2,8 @@
   <div class="container-fluid">
     <a class="navbar-brand">PANEL DE ADMINISTRADOR</a>
 
-    <form action="/api/sessions/logout" method="GET" class="d-flex">
-      <button class="btn btn-outline-primary" type="button">Log Out</button>
+    <form action="/api/session/logout" method="GET" class="d-flex">
+      <button class="btn btn-outline-primary" type="submit">Log Out</button>
     </form>
 
   </div>
@@ -18,8 +18,7 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <div class="btn-group" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-primary">Cargar todos</button>
-          <button type="button" class="btn btn-primary">Buscar por ID</button>
+          <a href="adminUsers" class="btn btn-primary">Cargar todos</a>
         </div>
       </div>
     </div> 
@@ -34,16 +33,10 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-primary">Cargar todos</button>
-        <button type="button" class="btn btn-primary">Crear</button>
-        <button type="button" class="btn btn-primary">Buscar por ID</button>
+        <a href="/adminPanel" class="btn btn-primary">Cargar todos</a>
+        <a href="/createEditProduct" class="btn btn-primary">Crear</a>
       </div>
     </div>
   </div>
 </nav>
 
-{{!-- <div class="navbar-nav">
-  <a class="nav-link active" aria-current="page" href="#">Cargar todos</a>
-  <a class="nav-link" href="#">Crear</a>
-  <a class="nav-link" href="#">Buscar por ID</a>
-</div> --}}

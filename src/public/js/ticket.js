@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const response = await fetch(`/api/cart/ticket/${ticketId}`);
     const ticket = await response.json();
-
+    console.log(ticket);
     const ticketInfoElement = document.getElementById('ticket-info');
     ticketInfoElement.innerHTML = `
         <h2>Detalles del Ticket</h2>
@@ -15,9 +15,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             ${ticket.products.map(product => `
                 ${product.id_prod ? `
                     <div>
-                        <h3>${product.id_prod.title}</h3>
-                        <p>Descripción: ${product.id_prod.description}</p>
-                        <p>Precio: $${product.id_prod.price}</p>
+                        <h3>${product.title}</h3>
+                        <p>Descripción: ${product.description}</p>
+                        <p>Precio: $${product.price}</p>
                         <p>Cantidad: ${product.quantity}</p>
                         <hr>
                     </div>

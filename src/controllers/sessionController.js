@@ -11,9 +11,9 @@ export const login = async (req, res) => {
         if (!req.user) {
             return res.status(401).json({ error: "Usuario o contraseña no válidos" });
         }
-
-        const token = jwt.sign({userEmail: req.user.email}, varenv.jwt_secret, {expiresIn: '1h'});
-       
+        const usuario = req.user;
+        const token = jwt.sign({ usuario }, varenv.jwt_secret, { expiresIn: '12h' })
+;       
 
         req.session.user = {
             _id : req.user._id,

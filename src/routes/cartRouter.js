@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import { createCart, getCart, insertProductCart, createTicket, deleteFromCart} from "../controllers/cartController.js";
+import { createCart, getCart, insertProductCart, getTicket, createTicket, deleteFromCart} from "../controllers/cartController.js";
 
 const cartRouter = Router()
 
@@ -13,9 +13,12 @@ cartRouter.post('/', createCart)
 
 cartRouter.get('/:cid', getCart)
 
+cartRouter.get('/ticket/:tid', getTicket)
+
+
         //Agregar productos al carrito
 
-cartRouter.post('/:cid/products/:pid', passport.authenticate('jwt', { session: false }), insertProductCart);
+cartRouter.post('/:cid/products/:pid', insertProductCart);
 
         // Hacer la compra - De lo hay en el carrito
 

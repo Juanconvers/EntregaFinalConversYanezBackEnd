@@ -1,14 +1,12 @@
 document.addEventListener('DOMContentLoaded', async function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const cartId = urlParams.get('cartId');
 
     const sessionResponse = await fetch('/api/users/session');
     const userSession = await sessionResponse.json();
 
     const userInfoElement = document.getElementById('user-info');
     userInfoElement.textContent = `Usuario: ${userSession.email} `;
-
-    const response = await fetch(`/api/cart/${userSession.cart_id._id}`);
+    console.log(userSession);
+    const response = await fetch(`/api/cart/${userSession.cartId._id}`);
     const cart = await response.json();
 
     function renderCartProducts(cart) {
@@ -30,14 +28,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     renderCartProducts(cart);
 
     async function Purchase() {
-        const response = await fetch(`/api/cart/purchase/${userSession.cart_id._id}`, {
-            method: 'GET'
+        const response = await fetch(`/api/cart/${userSession.cartId._id}/purchase`, {
+            method: 'POST'
         });
         if (response.ok) {
             const data = await response.json();
-            window.location.href = `/ticket?ticketId=${data.ticketId}`;
+            const ticketUrl = `/ticket?ticketId=${data._id}`;
+            window.location.href = ticketUrl;
             history.pushState(null, '', ticketUrl);
-            alert('Compra finalizada correctamente');
+            
         } else {
             const errorMessage = await response.text();
             alert(`Error: ${errorMessage}`);
