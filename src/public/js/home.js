@@ -4,7 +4,7 @@ function goToCart() {
 document.addEventListener('DOMContentLoaded', async function () {
     const sessionResponse = await fetch('/api/users/session');
     const userSession = await sessionResponse.json();
-
+    
     const userInfoElement = document.getElementById('user-info');
     userInfoElement.textContent = `Usuario: ${userSession.email}`;
 
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     function renderProducts(products) {
         const productList = document.getElementById('product-list');
-        products.docs.forEach(product => {
+        products.forEach(product => {
             const productElement = document.createElement('div');
             productElement.innerHTML = `
                 <h2>${product.title}</h2>

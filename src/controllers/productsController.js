@@ -20,8 +20,6 @@ export const getProducts = async (req, res) => {
     const prodsJSON = prods.docs.map(prod => prod)
     
     res.status(200).send(prodsJSON)
-
-    // console.log(prods)
 } catch (error){
     res.status(500).send(`Error interno del servidor al consultar los productos: ${error}`)
 }}
@@ -30,9 +28,9 @@ export const getProducts = async (req, res) => {
 
 export const createProduct = async (req, res) => {
     
-    console.log(req.user)
+    //console.log(req.user)
    //Qué da?
-    console.log(req.user.role)
+    //console.log(req.user.role)
 
     try {
         if (req.user && req.user.role === "Admin"){
@@ -96,7 +94,7 @@ export const updateProduct = async (req, res) => {
     
 export const deleteProduct = async (req, res) => {
     try {
-        console.log(req.user.role)
+        //console.log(req.user.role)
         if (req.user && req.user.role === "Admin") {
             const idProducto = req.params.pid
             const mensaje = await productModel.findByIdAndDelete(idProducto)

@@ -2,6 +2,7 @@ import userModel from "../models/user.js"
 import { sendEmailRecoverPassword } from "../utils/nodemailer.js";
 import jwt from 'jsonwebtoken'
 import { validatePassword, createHash } from "../utils/bcrypt.js"
+import varenv from "../dotenv.js";
 
 // Login 
 
@@ -11,10 +12,11 @@ export const login = async (req, res) => {
             return res.status(401).json({ error: "Usuario o contraseña no válidos" });
         }
 
-        const token = generateToken(req.user);
-        console.log(token)
+        const token = jwt.sign({userEmail: req.user.email}, varenv.jwt_secret, {expiresIn: '1h'});
+       
 
         req.session.user = {
+            _id : req.user._id,
             email: req.user.email,
             name: req.user.name,
             role: req.user.role,
@@ -57,7 +59,7 @@ export const logout = async (req, res) => {
         if (e) {
             console.log(e)
         } else {
-            res.status(200).redirect("/")
+            res.status(200).redirect("/login")
         }
     })
 }

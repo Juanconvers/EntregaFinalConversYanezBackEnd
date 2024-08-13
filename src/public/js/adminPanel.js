@@ -1,25 +1,28 @@
 async function fetchProducts() {
     const response = await fetch('/api/products');
     const products = await response.json();
-    const tbody = document.querySelector('#productsTable tbody');
-    tbody.innerHTML = '';
-
-    products.docs.forEach(product => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${product.title}</td>
-            <td>${product.description}</td>
-            <td>${product.stock}</td>
-            <td>${product.category}</td>
-            <td>${product.status ? 'Activo' : 'Inactivo'}</td>
-            <td>${product.code}</td>
-            <td>${product.price}</td>
-            <td>
-                <button onclick="editProduct('${product._id}')">Editar</button>
-                <button onclick="deleteProduct('${product._id}')">Eliminar</button>
-            </td>
+    const card = document.querySelector('#productsRender');
+    
+    products.docs.forEach (product => {
+        const print = document.createElement('div');
+        card.innerHTML = `
+            <p>Nombre</p>
+            <div>${product.title}</div>
+            <p>Descripción</p>
+            <div>${product.description}</div>
+            <p>En Stock</p>
+            <div>${product.stock}</div>
+            <p>Categoría</p>
+            <div>${product.category}</div>
+            <p>Código</p>
+            <div>${product.code}</div>
+            <p>Precio</p>
+            <div>${product.price}</div>
+            <div>
+                <button onclick="deleteProduct('${product._id}')">Eliminar producto</button>
+            </div>
         `;
-        tbody.appendChild(tr);
+        div.appendChild(div);
     });
 }
 

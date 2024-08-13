@@ -2,7 +2,8 @@
   <div class="container-fluid">
 
     <a class="navbar-brand" href="/home">E-COMMERCE JUAN CONVERS</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -14,10 +15,10 @@
 
       </ul>
     </div>
-       
-    <div class="d-flex">
-      <button class="btn btn-outline-primary" type="button">Log Out</button>
-    </div>
+
+    <form action="/api/session/logout" method="GET" class="d-flex">
+      <button class="btn btn-outline-primary" type="submit">Log Out</button>
+    </form>
 
   </div>
 </nav>
@@ -25,10 +26,10 @@
 
 
 
-    {{!-- <form class="d-flex" role="search">
-      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-primary" type="submit">Log Out</button>
-    </form>
-        {{!-- <div>
-      <h1>Cargar productos</h1>
-    </div> --}}
+{{!-- <form class="d-flex" role="search">
+  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+  <button class="btn btn-outline-primary" type="submit">Log Out</button>
+</form>
+{{!-- <div>
+  <h1>Cargar productos</h1>
+</div> --}}

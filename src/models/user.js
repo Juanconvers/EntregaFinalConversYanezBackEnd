@@ -41,20 +41,25 @@ const userSchema = new Schema({
 })
 
 userSchema.pre('save', async function (next) {
-    try {
-        const newCart = await cartModel.create({ products: [] })
-        console.log(newCart)
-        this.cart_id = newCart._id
-    } catch (e) {
-        next(e)
+    if (this.isNew) {
+        try {
+            const newCart = await cartModel.create({ products: [] })
+            this.cart_id = newCart._id;
+        } catch (error) {
+        // Si ocurre un error, pásalo al siguiente middleware en la cadena
+        //NEXT se usa para continuar
+        return next(error)
+        }
     }
-})
+    next();
+});
 
-userSchema.pre('find', async function (next){
+userSchema.pre(['find', 'findOne'], function (next) {
     try {
         // const prods = await cartModel.findOne({ _id: })
         // console.log(prods)
         this.populate('cart_id')
+        next()
     } catch (e) {
         next(e)
     }
